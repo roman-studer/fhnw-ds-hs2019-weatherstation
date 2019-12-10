@@ -1,0 +1,17 @@
+<svg id="Ebene_1" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 40.91 40.91">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#New_Gradient_Swatch_1);
+      }
+    </style>
+    <linearGradient id="New_Gradient_Swatch_1" data-name="New Gradient Swatch 1" x1="5.99" y1="34.92" x2="34.92" y2="5.99" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fbb909"/>
+      <stop offset="1" stop-color="#ffce00"/>
+    </linearGradient>
+  </defs>
+  <title>Zeichenfläche 1</title>
+  <g id="Mostly_Sunny" data-name="Mostly Sunny">
+    <circle class="cls-1" cx="20.46" cy="20.46" r="20.46"/>
+  </g>
+</svg>

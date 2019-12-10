@@ -1,0 +1,235 @@
+/*.js-plotly-plot .plotly .modebar {
+  padding-top: 5%;
+  margin-right: 3.5%;
+}*/
+
+#output-clientside {
+    display: none;
+}
+
+html {
+    font-size: 16px;
+    line-height: 1.5;
+
+    -ms-touch-action: none !important;
+
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+
+    text-rendering: optimizeLegibility;
+    -webkit-font-feature-settings: "kern";
+    -moz-font-feature-settings: "kern";
+    -moz-font-feature-settings: "kern=1";
+    font-feature-settings: "kern";
+
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+
+    -webkit-overflow-scrolling: touch;
+
+    scroll-behavior: smooth;
+    hyphens: auto;
+
+    line-height: inherit;
+    font-weight: normal;
+    font-family: "Montserrat", "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #000;
+    background-color: #fff;
+}
+
+.section {
+    padding: 1rem 3rem;
+}
+
+/* Intro */
+.section--intro {
+    padding: 0;
+    background-color: #fff;
+}
+
+/* General */
+.section--general {
+    /*background-color: #062b4a;*/
+    background-color: #b7fae6;
+}
+.section__inner--general {
+    display: grid;
+    grid-gap: 0.5rem;
+    /*grid-template-areas:
+        "header header header header controller controller"
+        "one one two two three four"
+        "wind-1 wind-1 wind-2 wind-2 wind-3 wind-3"
+        "airt airt airt windt windt windt"
+        "stuff stuff stuff stuff stuff stuff";*/
+    grid-template-rows: auto;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+/* Wind */
+.section--wind {
+    background-color: #fff;
+}
+.section__inner--wind {
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-template-areas:
+        "wind-speed wind-speed wind-rose wind-rose wind-histogram wind-histogram";
+    grid-template-rows: auto;
+}
+
+
+.section--prosa {
+    background-color: #062b4a;
+    color: #fff;
+}
+
+.section__inner--prosa {
+    display: grid;
+    grid-gap: 3rem;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto;
+}
+.box--prosa {
+
+}
+
+.figure--wind-speed {
+    grid-area: wind-speed;
+}
+.figure--wind-rose {
+    grid-area: wind-rose;
+}
+.figure--wind-histogram {
+    grid-area: wind-histogram;
+}
+.section--stuff {
+}
+
+
+.figure {
+    margin: 0;
+}
+.figure span {
+    display: inline-block;
+    letter-spacing: -0.05rem;
+}
+.figure .value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-right: 0.25rem;
+}
+.figure .unit {
+    font-size: 1.25rem;
+    position: relative;
+    top: -0.5rem;
+    font-weight: 300;
+    opacity: 0.4;
+}
+.figure figcaption {
+    text-transform: uppercase;
+    font-size: 0.6rem;
+    font-weight: 500;
+    opacity: 0.6;
+}
+
+
+
+
+.grid {
+    /*margin: 1rem;
+    display: grid;
+    grid-template-columns: auto;
+    grid-gap: 1rem;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "header header header header controller controller"
+        "one one two two three four"
+        "wind-1 wind-1 wind-2 wind-2 wind-3 wind-3"
+        "airt airt airt windt windt windt"
+        "stuff stuff stuff stuff stuff stuff";
+    grid-template-rows: auto;
+    grid-template-columns: repeat(6, 1fr);*/
+}
+.box {
+
+}
+.header {
+    padding: 1.5rem 0;
+    background: transparent url("images/sunny.svg") no-repeat;
+    background-size: auto 140%;
+    background-position: center center;
+}
+
+
+h1 {
+    margin: 1.5rem 0;
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.1rem;
+    text-align: center;
+}
+h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+}
+h3 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0.5rem 0;
+}
+h4 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+    opacity: 0.8;
+    margin: 1.5rem 0 1rem 0;
+}
+h5 {
+    font-size: 0.85rem;
+    letter-spacing: 0.125rem;
+    font-weight: 600;
+    color: #767676;
+    margin: 0.5rem 0 0 0;
+    text-align: center;
+}
+p {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+.controller {
+    position: fixed;
+    left: 1rem;
+    top: 1rem;
+    background-color: white;
+    z-index: 10;
+
+}
+.prosa__list {
+    margin: 2rem 0 0 0;
+    padding: 0;
+    list-style: none;
+}
+.prosa__list li {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.1);
+    font-size: 0.65rem;
+    margin: 0 0.3rem 0.3rem 0;
+    padding: 0.2rem 0.5rem;
+    border-radius: 2rem;
+}
