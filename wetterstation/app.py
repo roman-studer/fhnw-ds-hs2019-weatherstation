@@ -12,9 +12,6 @@ import dash
 from dash.dependencies import Input, Output, State, ClientsideFunction
 import dash_core_components as dcc
 import dash_html_components as html
-import statsmodels.api as sm
-#import plotly.figure_factory as ff
-#import plotly.graph_objs as go
 from scipy.stats import rayleigh
 from config import *
 from get_data import *
@@ -74,30 +71,12 @@ app.index_string = """
 
 
 
-# Load data
-# df = pd.read_csv(DATA_PATH.joinpath("wellspublic.csv"), low_memory=False)
-# df["Date_Well_Completed"] = pd.to_datetime(df["Date_Well_Completed"])
-# df = df[df["Date_Well_Completed"] > dt.datetime(1960, 1, 1)]
-#
-# trim = df[["API_WellNo", "Well_Type", "Well_Name"]]
-# trim.index = trim["API_WellNo"]
-# dataset = trim.to_dict(orient="index")
-
-
-
-
-
-
-
-
-
-
-
 
 app_color = {
     "graph_bg": "#ffffff",
     "graph_gridline": "#EDEDED",
     "graph_line": "#007ACE",
+    "transparent": "rgba(255, 255, 255, 0)",
 }
 
 layout = dict(
@@ -120,13 +99,20 @@ layout = dict(
 # Create app layout
 app.layout = html.Div(
     [
-        #dcc.Store(id="aggregate_data"),
         # empty Div to trigger javascript file for graph resizing
         html.Div(id="output-clientside"),
         dcc.Interval(
             id="update-interval",
             interval=int(GRAPH_INTERVAL),
             n_intervals=0,
+        ),
+
+        # Weather icon
+        html.Div(
+            [
+                html.Img(src="assets/images/sunny.svg"),
+            ],
+            className="weather-icon",
         ),
 
         # Section (Intro)
@@ -139,9 +125,6 @@ app.layout = html.Div(
                             [
                                 html.H1(
                                     "Hallo stürmischer Tag!",
-                                ),
-                                html.H5(
-                                    "Willkommen zur Wetterstation für Segler",
                                 ),
                             ],
                             className="header__title",
@@ -185,13 +168,32 @@ app.layout = html.Div(
                     [
                         html.Div(
                             [
+                                dcc.Graph(
+                                    id="air_temperature",
+                                    figure=dict(
+                                        layout=dict(
+                                            plot_bgcolor=app_color["graph_bg"],
+                                            paper_bgcolor=app_color["graph_bg"],
+                                        )
+                                    ),
+                                ),
+                                html.Figure(
+                                    [
+                                        html.Div([
+                                            html.Span(id="mean_air_temperature_text", className="value"),
+                                            html.Span(["°C"], className="unit"),
+                                        ]),
+                                        html.Figcaption(["Lufttemperatur"], className="figcaption"),
+                                    ],
+                                    className="figure figure--mean-air-temperature",
+                                ),
                                 html.Figure(
                                     [
                                         html.Div([
                                             html.Span(id="air_temperature_text", className="value"),
                                             html.Span(["°C"], className="unit"),
                                         ]),
-                                        html.Figcaption(["Gemessene Lufttemperatur"], className="figcaption"),
+                                        html.Figcaption(["Lufttemperatur"], className="figcaption"),
                                     ],
                                     className="figure figure--last-air-temperature",
                                 ),
@@ -204,9 +206,10 @@ app.layout = html.Div(
                                     [
                                         html.Div([
                                             html.Span(id="windchill_text", className="value"),
+                                            html.Span(id="windchill_past_text", className="past-value"),
                                             html.Span(["°C"], className="unit"),
                                         ]),
-                                        html.Figcaption(["Gefühlte Lufttemperatur"], className="figcaption"),
+                                        html.Figcaption(["Windchill"], className="figcaption"),
                                     ],
                                     className="figure figure--last-windchill",
                                 ),
@@ -304,8 +307,21 @@ app.layout = html.Div(
                         html.Div(
                             [
                                 html.H3("Titel der auch"),
-                                html.P(
-                                    "Das ist der Prosa-Text, der sich dann anpassen lässt und auch etwas länger sein wird, weil er eine Progrnosse macht"),
+                                html.P("Das ist der Prosa-Text, der sich dann anpassen lässt und auch etwas länger sein wird, weil er eine Progrnosse macht"),
+                                html.Ul(
+                                    [
+                                        html.Li("Böenspitzen"),
+                                    ],
+                                    className="prosa__list",
+                                ),
+                            ],
+                            className="box box--prosa",
+                        ),
+                        html.Div(
+                            [
+                                html.H3("Starkwindwarnung"),
+                                html.P(id="strong_wind_warning_text"),
+                                # Das ist der Prosa-Text, der sich dann anpassen lässt und auch etwas länger sein wird, weil er eine Progrnosse macht
                                 html.Ul(
                                     [
                                         html.Li("Windgeschwindigkeit"),
@@ -313,8 +329,7 @@ app.layout = html.Div(
                                     ],
                                     className="prosa__list",
                                 ),
-                            ],
-                            className="box box--prosa",
+                            ]
                         ),
                     ],
                     className="section__inner section__inner--prosa",
@@ -419,25 +434,82 @@ app.clientside_callback(
 
 
 
+
 @app.callback(
     Output("air_temperature_text", "children"), [Input("update-interval", "n_intervals")],
 )
 def update_air_temperature_text(interval):
 
-    dataframeli = get_last_data()
-    last_air_temperature = dataframeli["last_air_temperature"]
+    df = get_last_data()
+    last_air_temperature = df["last_air_temperature"]
 
     return last_air_temperature
 
 
 
 @app.callback(
+    Output("mean_air_temperature_text", "children"), [Input("update-interval", "n_intervals")],
+)
+def update_mean_air_temperature_text(interval):
+
+    df = get_all_data("7d")
+    mean_air_temperature = round(df["air_temperature"].mean(), 2)
+
+    return mean_air_temperature
+
+
+#
+# @app.callback(
+#     [Output("windchill_text", "children")],
+#     [Input("update-interval", "n_intervals")],
+# )
+# def update_windchill_text(interval):
+#
+#     df = get_last_data()
+#     last_windchill = df["last_windchill"]
+#
+#     return last_windchill
+#
+
+
+
+
+@app.callback(
+    [
+        Output("windchill_text", "children"),
+        Output("windchill_past_text", "children"),
+    ],
+    [Input("update-interval", "n_intervals")],
+)
+def update_windchill_texts(interval):
+
+    df = get_last_data()
+    last_windchill = df["last_windchill"]
+
+    return last_windchill, "guguseli"
+
+
+
+@app.callback(
+    Output("water_temperature_text", "children"), [Input("update-interval", "n_intervals")],
+)
+def update_water_temperature_text(interval):
+
+    df = get_last_data()
+    last_water_temperature = df["last_water_temperature"]
+
+    return last_water_temperature
+
+
+
+
+@app.callback(
     Output("humidity_text", "children"), [Input("update-interval", "n_intervals")],
 )
-def update_air_temperature_text(interval):
+def update_humidity_text(interval):
 
-    dataframeli = get_last_data()
-    last_humidity = dataframeli["last_humidity"]
+    df = get_last_data()
+    last_humidity = df["last_humidity"]
 
     return last_humidity
 
@@ -447,37 +519,13 @@ def update_air_temperature_text(interval):
 @app.callback(
     Output("dew_point_text", "children"), [Input("update-interval", "n_intervals")],
 )
-def update_air_temperature_text(interval):
+def update_dew_point_text(interval):
 
-    dataframeli = get_last_data()
-    last_dew_point = dataframeli["last_dew_point"]
+    df = get_last_data()
+    last_dew_point = df["last_dew_point"]
 
     return last_dew_point
 
-
-
-
-
-@app.callback(
-    Output("windchill_text", "children"), [Input("update-interval", "n_intervals")],
-)
-def update_windchill_text(interval):
-
-    dataframeli = get_last_data()
-    last_windchill = dataframeli["last_windchill"]
-
-    return last_windchill
-
-
-@app.callback(
-    Output("water_temperature_text", "children"), [Input("update-interval", "n_intervals")],
-)
-def update_water_temperature_text(interval):
-
-    dataframeli = get_last_data()
-    last_water_temperature = dataframeli["last_water_temperature"]
-
-    return last_water_temperature
 
 
 
@@ -487,8 +535,8 @@ def update_water_temperature_text(interval):
 )
 def update_barometric_pressure_qfe_text(interval):
 
-    dataframeli = get_last_data()
-    last_barometric_pressure_qfe = dataframeli["last_barometric_pressure_qfe"]
+    df = get_last_data()
+    last_barometric_pressure_qfe = df["last_barometric_pressure_qfe"]
 
     return last_barometric_pressure_qfe
 
@@ -588,6 +636,80 @@ def update_barometric_pressure_qfe_text(interval):
 
 
 
+@app.callback(
+    Output("strong_wind_warning_text", "children"), [Input("update-interval", "n_intervals")],
+)
+def update_strong_wind_warning_text(interval):
+
+    #df = get_last_data()
+    #last_barometric_pressure_qfe = df["strong_wind_warning_text"]
+
+    return dt.datetime.now()
+
+
+
+
+
+
+
+
+@app.callback(
+    Output("air_temperature", "figure"), [Input("update-interval", "n_intervals")]
+)
+def gen_air_temperature(interval):
+    """
+    Generate the wind speed graph.
+    :params interval: update the graph based on an interval
+    """
+
+    df = get_single_column("air_temperature", "6h")
+
+    trace_speed = dict(
+        type="scatter",
+        y=df["air_temperature"].values,
+        x=df.index,
+        line={"color": "#42C4F7"},
+        hoverinfo="skip",
+        # error_y={
+        #     "type": "data",
+        #     "array": df["wind_gust_max_10min"],
+        #     "thickness": 1.5,
+        #     "width": 2,
+        #     "color": "#B4E8FC",
+        # },
+        mode="lines+markers",
+    )
+
+    layout = dict(
+        plot_bgcolor=app_color["transparent"],
+        paper_bgcolor=app_color["transparent"],
+        margin=dict(l=0, r=10, b=40, t=20),
+        hovermode="closest",
+        showlegend=False,
+        height=160,
+
+        xaxis={
+            "showgrid": False,
+            "zeroline": False,
+            "gridcolor": app_color["graph_gridline"],
+            "tickformat": "%H:%M",
+            "side": "top",
+        },
+        yaxis={
+            "showgrid": False,
+            "showline": True,
+            "fixedrange": False,
+            "zeroline": False,
+            "title": "m/s",
+            "gridcolor": app_color["graph_gridline"],
+            #"nticks": max(5, round(df["wind_speed_avg_10min"].iloc[-1] / 6)),
+        },
+    )
+
+    return dict(data=[trace_speed], layout=layout)
+
+
+
 
 
 
@@ -600,18 +722,18 @@ def gen_wind_speed(interval):
     :params interval: update the graph based on an interval
     """
 
-    dataframeli = get_wind_data("4h")
-    max_wind_speed_in_serie = dataframeli["wind_speed_avg_10min"].max()
-    max_wind_gust_in_serie = dataframeli["wind_gust_max_10min"].max()
+    df = get_wind_data("4h")
+    max_wind_speed_in_serie = df["wind_speed_avg_10min"].max()
+    max_wind_gust_in_serie = df["wind_gust_max_10min"].max()
 
     trace_speed = dict(
         type="scatter",
-        y=dataframeli["wind_speed_avg_10min"],
+        y=df["wind_speed_avg_10min"],
         line={"color": "#42C4F7"},
         hoverinfo="skip",
         # error_y={
         #     "type": "data",
-        #     "array": dataframeli["wind_gust_max_10min"],
+        #     "array": df["wind_gust_max_10min"],
         #     "thickness": 1.5,
         #     "width": 2,
         #     "color": "#B4E8FC",
@@ -621,12 +743,12 @@ def gen_wind_speed(interval):
 
     trace_gust = dict(
         type="scatter",
-        y=dataframeli["wind_gust_max_10min"],
+        y=df["wind_gust_max_10min"],
         line={"color": "#42C4F7"},
         hoverinfo="skip",
         # error_y={
         #     "type": "data",
-        #     "array": dataframeli["wind_gust_max_10min"],
+        #     "array": df["wind_gust_max_10min"],
         #     "thickness": 1.5,
         #     "width": 2,
         #     "color": "#B4E8FC",
@@ -682,7 +804,7 @@ def gen_wind_speed(interval):
             "zeroline": False,
             "title": "m/s",
             "gridcolor": app_color["graph_gridline"],
-            #"nticks": max(5, round(dataframeli["wind_speed_avg_10min"].iloc[-1] / 6)),
+            #"nticks": max(5, round(df["wind_speed_avg_10min"].iloc[-1] / 6)),
         },
     )
 

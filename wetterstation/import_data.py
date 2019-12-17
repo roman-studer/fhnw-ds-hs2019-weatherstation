@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import pandas as pd
 import numpy as np
-#from influxdb import InfluxDBClient
 from influxdb import DataFrameClient
 import requests
 import json
