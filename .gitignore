@@ -133,5 +133,6 @@ dmypy.json
 # PyCharm
 .idea
 
-# Data
-/wetterstation/data
+# iCloud Files
+.icloud
+/*.icloud
