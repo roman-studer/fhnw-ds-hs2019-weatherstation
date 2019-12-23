@@ -43,9 +43,9 @@ body {
 
     line-height: inherit;
     font-weight: normal;
-    font-family: "Montserrat", "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Dosis", "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #000;
-    background-color: #b7fae6;
+    background-color: #fbfcfd;
 }
 
 .section {
@@ -59,23 +59,29 @@ body {
     padding: 0;
 }
 
+/* Temperature and wind */
+.section--temperature-and-wind {
+    padding-top: 0;
+}
+.section__inner--temperature-and-wind {
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: auto;
+}
+
+
 /* General */
 .section--general {
     padding-top: 0;
 }
 .section__inner--general {
+    padding: 1rem 0;
     display: grid;
     grid-gap: 2rem;
-    /*grid-template-areas:
-        "header header header header controller controller"
-        "one one two two three four"
-        "wind-1 wind-1 wind-2 wind-2 wind-3 wind-3"
-        "airt airt airt windt windt windt"
-        "stuff stuff stuff stuff stuff stuff";*/
     grid-template-rows: auto;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, auto);
-    grid-auto-rows: auto;
+    grid-template-columns: repeat(6, 1fr);
 }
 
 /* Wind */
@@ -89,6 +95,21 @@ body {
         "wind-speed wind-speed wind-rose wind-rose wind-histogram wind-histogram";
     grid-template-rows: 1fr;
 }
+
+.wind-graphs {
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-template-areas:
+        "wind-speed wind-speed wind-direction";
+    grid-template-rows: 1fr;
+}
+.graph--wind-speed {
+    grid-area: "wind-speed";
+}
+.graph--wind-direction {
+    grid-area: "wind-direction";
+}
+
 
 
 .section--prosa {
@@ -117,10 +138,19 @@ body {
 
 
 .box {
+
+}
+.box--temperature-and-wind {
     background-color: #fff;
     border-radius: 25px;
     overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, .15);
+    box-shadow: 0 10px 70px rgba(0, 0, 0, .1);
+    padding: 1.5rem 1.75rem;
+}
+.box__title {
+    font-size: 1rem;
+    margin: 0 0 0.75rem 0;
+    text-transform: uppercase;
 }
 
 
@@ -129,7 +159,6 @@ body {
 }
 .figure span {
     display: inline-block;
-    letter-spacing: -0.05rem;
 }
 .figure .value {
     font-size: 2rem;
@@ -154,19 +183,7 @@ body {
 
 
 .grid {
-    /*margin: 1rem;
-    display: grid;
-    grid-template-columns: auto;
-    grid-gap: 1rem;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "header header header header controller controller"
-        "one one two two three four"
-        "wind-1 wind-1 wind-2 wind-2 wind-3 wind-3"
-        "airt airt airt windt windt windt"
-        "stuff stuff stuff stuff stuff stuff";
-    grid-template-rows: auto;
-    grid-template-columns: repeat(6, 1fr);*/
+
 }
 
 
@@ -180,20 +197,19 @@ body {
 .weather-icon img {
     display: block;
     margin: auto;
-    width: 66.666%;
+    width: 50%;
     height: auto;
 }
 
 .header {
-    padding: 1rem 3rem;
+    padding: 2rem 3rem;
 }
 
 
 h1 {
     margin: 0;
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.1rem;
+    font-size: 1.5rem;
+    font-weight: 700;
 }
 h2 {
     margin: 0;
@@ -203,21 +219,20 @@ h2 {
 }
 h3 {
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 700;
     color: #fff;
     margin: 0.5rem 0;
 }
 h4 {
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
     color: #fff;
     opacity: 0.8;
     margin: 1.5rem 0 1rem 0;
 }
 h5 {
     font-size: 0.85rem;
-    letter-spacing: 0.125rem;
-    font-weight: 600;
+    font-weight: 700;
     color: #767676;
     margin: 0.5rem 0 0 0;
     text-align: center;

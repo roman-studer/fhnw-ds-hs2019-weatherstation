@@ -22,6 +22,25 @@ from config import *
 
 
 
+def get_all_historic_data(station):
+    """
+    Query all historic data
+    :returns: pandas dataframe object
+    """
+
+    client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
+
+    # TODO: adjust query to retrieve all data
+    query = """SELECT 
+            *
+            FROM "meteorology"."autogen"."mythenquai" WHERE time > 2015-01-01""".format(station)
+
+    df = pd.DataFrame(client.query(query)[station])
+    return df
+
+
+
+
 def get_all_data(time_back):
     """
     Query all data
@@ -93,6 +112,12 @@ def get_air_temperature():
 
     df = pd.DataFrame(client.query(query)["mythenquai"])
     return df
+
+
+
+
+
+
 
 
 
