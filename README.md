@@ -1,12 +1,8 @@
-# Dash Natural Gas Well Production
-
-This is a demo of the Dash interactive Python framework developed by [Plotly](https://plot.ly/).
-
-Dash abstracts away all of the technologies and protocols required to build an interactive web-based application and is a simple and effective way to bind a user interface around your Python code. To learn more check out our [documentation](https://plot.ly/dash).
+# Wetterstation für Segler
 
 ## Getting Started
 
-### Running the app locally
+### Die App lokal installieren
 
 First create a virtual environment with conda or venv inside a temp folder, then activate it.
 
@@ -17,44 +13,32 @@ virtualenv venv
 venv\Scripts\activate
 # Or Linux
 source venv/bin/activate
-
 ```
 
 Clone the git repo, then install the requirements with pip
 
 ```
-
 git clone https://github.com/plotly/dash-sample-apps
-cd dash-sample-apps/apps/dash-oil-and-gas
+cd fhnw-ds-has2019-weatherstation
 pip install -r requirements.txt
+```
 
+Import the data from the CSVs and the API into influxDB
+
+```
+python import_data.py
 ```
 
 Run the app
-
 ```
-
 python app.py
-
 ```
 
 ## About the app
 
-This Dash app displays oil production in western New York. There are filters at the top of the app to update the graphs below. By selecting or hovering over data in one plot will update the other plots ('cross-filtering').
+This app displays weather data from the "Mythenquai" and the "Tiefenbrunnen" weather stations.
+There is a station switcher at the top of the app to update the graphs below. By selecting or hovering over data in one plot will update the other plots ('cross-filtering').
 
 ## Built With
 
 - [Dash](https://dash.plot.ly/) - Main server and interactive components
-- [Plotly Python](https://plot.ly/python/) - Used to create the interactive plots
-
-## Screenshots
-
-The following are screenshots for the app in this repo:
-
-![animated1](screenshots/animated1.gif)
-
-![screenshot](screenshots/screenshot1.png)
-
-![screenshot](screenshots/screenshot2.png)
-
-![screenshot](screenshots/screenshot3.png)

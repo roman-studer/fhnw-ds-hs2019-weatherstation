@@ -45,27 +45,27 @@ body {
     font-weight: normal;
     font-family: "Montserrat", "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #000;
-    background-color: #fff;
+    background-color: #b7fae6;
 }
 
 .section {
     padding: 1rem 3rem;
+    position: relative;
+    z-index: 2;
 }
 
 /* Intro */
 .section--intro {
     padding: 0;
-    background-color: #fff;
 }
 
 /* General */
 .section--general {
-    /*background-color: #062b4a;*/
-    background-color: #b7fae6;
+    padding-top: 0;
 }
 .section__inner--general {
     display: grid;
-    grid-gap: 0.5rem;
+    grid-gap: 2rem;
     /*grid-template-areas:
         "header header header header controller controller"
         "one one two two three four"
@@ -73,7 +73,9 @@ body {
         "airt airt airt windt windt windt"
         "stuff stuff stuff stuff stuff stuff";*/
     grid-template-rows: auto;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, auto);
+    grid-auto-rows: auto;
 }
 
 /* Wind */
@@ -85,7 +87,7 @@ body {
     grid-gap: 0.5rem;
     grid-template-areas:
         "wind-speed wind-speed wind-rose wind-rose wind-histogram wind-histogram";
-    grid-template-rows: auto;
+    grid-template-rows: 1fr;
 }
 
 
@@ -100,9 +102,6 @@ body {
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: auto;
 }
-.box--prosa {
-
-}
 
 .figure--wind-speed {
     grid-area: wind-speed;
@@ -114,6 +113,14 @@ body {
     grid-area: wind-histogram;
 }
 .section--stuff {
+}
+
+
+.box {
+    background-color: #fff;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, .15);
 }
 
 
@@ -161,23 +168,32 @@ body {
     grid-template-rows: auto;
     grid-template-columns: repeat(6, 1fr);*/
 }
-.box {
 
+
+.weather-icon {
+    position: absolute;
+    z-index: 1;
+    top: -33vh;
+    right: 0;
+    left: 0;
 }
+.weather-icon img {
+    display: block;
+    margin: auto;
+    width: 66.666%;
+    height: auto;
+}
+
 .header {
-    padding: 1.5rem 0;
-    background: transparent url("images/sunny.svg") no-repeat;
-    background-size: auto 140%;
-    background-position: center center;
+    padding: 1rem 3rem;
 }
 
 
 h1 {
-    margin: 1.5rem 0;
-    font-size: 2.5rem;
+    margin: 0;
+    font-size: 2rem;
     font-weight: 800;
     letter-spacing: -0.1rem;
-    text-align: center;
 }
 h2 {
     margin: 0;
@@ -214,7 +230,7 @@ p {
 
 .controller {
     position: fixed;
-    left: 1rem;
+    right: 1rem;
     top: 1rem;
     background-color: white;
     z-index: 10;
