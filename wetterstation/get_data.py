@@ -20,6 +20,7 @@ from config import *
 # [x] windchill(float)
 
 
+client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
 
 
 def get_all_historic_data(station):
@@ -28,12 +29,12 @@ def get_all_historic_data(station):
     :returns: pandas dataframe object
     """
 
-    client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
+    #client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
 
     # TODO: adjust query to retrieve all data
     query = """SELECT 
-            *
-            FROM "meteorology"."autogen"."mythenquai" WHERE time > 2015-01-01""".format(station)
+            mean(*)
+            FROM "meteorology"."autogen"."mythenquai" WHERE time > 2015-01-01 GROUP BY time(1h)""".format(station)
 
     df = pd.DataFrame(client.query(query)[station])
     return df
@@ -48,7 +49,7 @@ def get_all_data(time_back):
     :returns: pandas dataframe object
     """
 
-    client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
+    #client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
 
     query = """SELECT
                 *
@@ -65,7 +66,7 @@ def get_wind_data(time_back):
     :returns: pandas dataframe object
     """
 
-    client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
+    #client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
 
     query = """SELECT 
                 wind_direction,
@@ -86,7 +87,7 @@ def get_water_temperature(go_back):
     :returns: pandas dataframe object
     """
 
-    client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
+    #client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
 
     query = """SELECT 
                 water_temperature
@@ -104,7 +105,7 @@ def get_air_temperature():
     :returns: pandas dataframe object
     """
 
-    client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
+    #client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
 
     query = """SELECT 
                 air_temperature
@@ -129,8 +130,6 @@ def get_single_column(column_name, back_from_now):
     :returns: pandas dataframe object
     """
 
-    client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
-
     query = """SELECT 
                 {}
                 FROM "meteorology"."autogen"."mythenquai" WHERE time >= now() - {}""".format(column_name, back_from_now)
@@ -139,16 +138,34 @@ def get_single_column(column_name, back_from_now):
     return df
 
 
+def get_mean_value_of_last_week_between_time(column_name, back_from_now, time_start, time_end):
 
-def get_last_data():
+    df = get_single_column(column_name, back_from_now)
+    df = df.between_time(time_start, time_end)
+    df = df.mean()
 
-    client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
+    return df
+
+
+def get_last_timestamp_of_entry(station_name, column_name):
+
+    query = """SELECT
+                last({}), time
+                FROM "meteorology"."autogen"."{}" """.format(column_name, station_name)
+
+    df = pd.DataFrame(client.query(query)[station_name])
+    return df
+
+
+def get_last_data(station_name):
+
+    #client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
 
     query = """SELECT
                 last(*)
-                FROM "meteorology"."autogen"."mythenquai" WHERE time > now() - 3h"""
+                FROM "meteorology"."autogen"."mythenquai" """
 
-    df = pd.DataFrame(client.query(query)["mythenquai"])
+    df = pd.DataFrame(client.query(query)[station_name])
     return df
 
 

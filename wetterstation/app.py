@@ -108,16 +108,7 @@ app.layout = html.Div(
             interval=int(GRAPH_INTERVAL),
             n_intervals=0,
         ),
-
-        # Weather icon
-        html.Div(
-            [
-                html.Img(src="assets/images/sun.svg"),
-            ],
-            className="weather-icon",
-        ),
-
-        # Section (Intro)
+        # Section (Header)
         html.Div(
             [
                 # Header
@@ -170,92 +161,220 @@ app.layout = html.Div(
                     [
                         html.Div(
                             [
-                                html.H1(
-                                    ["Lufttemperatur und gefühlte Temperatur"],
-                                    className="box__title",
-                                ),
-                                dcc.Graph(
-                                    id="air_temperature",
-                                    figure=dict(
-                                        layout=dict(
-                                            plot_bgcolor=app_color["graph_bg"],
-                                            paper_bgcolor=app_color["graph_bg"],
-                                        )
-                                    ),
-                                ),
-                                html.Figure(
+                                html.Div(
                                     [
-                                        html.Div([
-                                            html.Span(id="air_temperature_forecast_1h_text", className="value"),
-                                            html.Span(["°C"], className="unit"),
-                                        ]),
-                                        html.Div([
-                                            html.Span(id="air_temperature_forecast_2h_text", className="value"),
-                                            html.Span(["°C"], className="unit"),
-                                        ]),
-                                        html.Div([
-                                            html.Span(id="air_temperature_forecast_4h_text", className="value"),
-                                            html.Span(["°C"], className="unit"),
-                                        ]),
-                                        html.Figcaption(["Lufttemperatur zukünftig"], className="figcaption"),
+                                        html.H1(
+                                            ["Windkühle und Lufttemperatur"],
+                                            className="box__title",
+                                        ),
+                                        dcc.Graph(
+                                            id="air_temperature",
+                                            figure=dict(
+                                                layout=dict(
+                                                    plot_bgcolor=app_color["graph_bg"],
+                                                    paper_bgcolor=app_color["graph_bg"],
+                                                )
+                                            ),
+                                        ),
                                     ],
-                                    className="figure figure--forecast-air-temperature",
+                                    className="box__inner box__inner--title-and-graph box__inner--temperature-graphs",
                                 ),
-                                html.Figure(
+                                html.Div(
                                     [
-                                        html.Div([
-                                            html.Span(id="air_temperature_current_text", className="value"),
-                                            html.Span(["°C"], className="unit"),
-                                        ]),
-                                        html.Figcaption(["Lufttemperatur"], className="figcaption"),
+                                        html.Div(
+                                            [
+                                                html.H2(
+                                                    ["Aktuelle Werte"],
+                                                    className="box__subtitle",
+                                                ),
+                                                html.Div(
+                                                    [
+                                                        html.Div(
+                                                            [
+                                                                html.H3(
+                                                                    ["Windkühle"],
+                                                                    className="box__smalltitle",
+                                                                ),
+                                                                html.Figure(
+                                                                    [
+                                                                        html.Div([
+                                                                            html.Span(
+                                                                                id="windchill_last_value",
+                                                                                className="value value--windchill-last"),
+                                                                            html.Span(["°C"], className="unit"),
+                                                                        ]),
+
+                                                                    ],
+                                                                    className="figure figure--windchill-last",
+                                                                ),
+                                                            ],
+                                                            className="value-box value-box--with-title"
+                                                        ),
+                                                        html.Div(
+                                                            [
+                                                                html.H3(
+                                                                    ["Lufttemp."],
+                                                                    className="box__smalltitle",
+                                                                ),
+                                                                html.Figure(
+                                                                    [
+                                                                        html.Div([
+                                                                            html.Span(
+                                                                                id="air_temperature_last_value",
+                                                                                className="value value--air-temperature-last"),
+                                                                            html.Span(["°C"], className="unit"),
+                                                                        ]),
+                                                                    ],
+                                                                    className="figure figure--air-temperature-last",
+                                                                ),
+                                                            ],
+                                                            className="value-box value-box--with-title",
+                                                        ),
+                                                    ],
+                                                    className="last-values__grid"
+                                                ),
+                                                html.Div(
+                                                    [
+                                                        html.P(
+                                                            id="last-values__text",
+                                                            className="paragraph"
+                                                        ),
+                                                    ],
+                                                    className="last-values__text"
+                                                ),
+                                            ],
+                                            className="last-values",
+                                        ),
+                                        html.Div(
+                                            [
+                                                html.H2(
+                                                    ["Prognose für die Lufttemperatur"],
+                                                    className="box__subtitle",
+                                                ),
+
+                                                html.Div(
+                                                    [
+                                                        html.Div(
+                                                            [
+                                                                html.H3(
+                                                                    ["In zwei Stunden"],
+                                                                    className="box__smalltitle",
+                                                                ),
+                                                                html.Figure(
+                                                                    [
+                                                                        html.Div([
+                                                                            html.Span(
+                                                                                id="air_temperature_forecast_2h_value",
+                                                                                className="value value--air-temperature-forecast"),
+                                                                            html.Span(["°C"], className="unit"),
+                                                                        ]),
+                                                                    ],
+                                                                    className="figure",
+                                                                ),
+                                                            ],
+                                                            className="value-box value-box--with-title",
+                                                        ),
+                                                        html.Div(
+                                                            [
+                                                                html.H3(
+                                                                    ["In fünf Stunden"],
+                                                                    className="box__smalltitle",
+                                                                ),
+                                                                html.Figure(
+                                                                    [
+                                                                        html.Div([
+                                                                            html.Span(
+                                                                                id="air_temperature_forecast_5h_value",
+                                                                                className="value value--air-temperature-forecast"),
+                                                                            html.Span(["°C"], className="unit"),
+                                                                        ]),
+                                                                    ],
+                                                                    className="figure",
+                                                                ),
+                                                            ],
+                                                            className="value-box value-box--with-title",
+                                                        ),
+                                                        html.Div(
+                                                            [
+                                                                html.H3(
+                                                                    ["Min/Max"],
+                                                                    className="box__smalltitle",
+                                                                ),
+                                                                html.Figure(
+                                                                    [
+                                                                        html.Div([
+                                                                            html.Span(
+                                                                                id="air_temperature_forecast_minmax_value",
+                                                                                className="value value--air-temperature-forecast"),
+                                                                            html.Span(["°C"], className="unit"),
+                                                                        ]),
+                                                                    ],
+                                                                    className="figure",
+                                                                ),
+                                                            ],
+                                                            className="value-box value-box--with-title",
+                                                        ),
+                                                    ],
+                                                    className="predicted-values__grid",
+                                                ),
+                                                html.Div(
+                                                    [
+                                                        html.P(
+                                                            [
+                                                                """Da sist ein Text, der auch etwas länger sein 
+                                                                kann und was er auch soll, damit man das etwas spürt,
+                                                                wie sich längerer Text verhält und so."""
+                                                            ],
+                                                            id="predicted-values__text",
+                                                            className="paragraph"
+                                                        ),
+                                                    ],
+                                                    className="predicted-values__text"
+                                                ),
+                                            ],
+                                            className="predicted-values",
+                                        ),
                                     ],
-                                    className="figure figure--current-air-temperature",
+                                    className="box__inner box__inner--values",
                                 ),
                             ],
                             className="box box--temperature-and-wind",
                         ),
                         html.Div(
                             [
-                                html.H1(
-                                    ["Windgeschwindigkeit und Windspitzen"],
-                                    className="box__title",
-                                ),
                                 html.Div(
                                     [
-                                        dcc.Graph(
-                                            id="wind-speed",
-                                            figure=dict(
-                                                layout=dict(
-                                                    plot_bgcolor=app_color["graph_bg"],
-                                                    paper_bgcolor=app_color["graph_bg"],
-                                                )
-                                            ),
-                                            className="graph graph--wind-speed"
+                                        html.H1(
+                                            ["Windgeschwindigkeit und Windspitzen"],
+                                            className="box__title",
                                         ),
-                                        dcc.Graph(
-                                            id="wind-direction",
-                                            figure=dict(
-                                                layout=dict(
-                                                    plot_bgcolor=app_color["graph_bg"],
-                                                    paper_bgcolor=app_color["graph_bg"],
-                                                )
-                                            ),
-                                            className="graph graph--wind-direction"
+                                        html.Div(
+                                            [
+                                                dcc.Graph(
+                                                    id="wind-speed",
+                                                    figure=dict(
+                                                        layout=dict(
+                                                            plot_bgcolor=app_color["graph_bg"],
+                                                            paper_bgcolor=app_color["graph_bg"],
+                                                        )
+                                                    ),
+                                                    className="graph graph--wind-speed"
+                                                ),
+                                                dcc.Graph(
+                                                    id="wind-direction",
+                                                    figure=dict(
+                                                        layout=dict(
+                                                            plot_bgcolor=app_color["graph_bg"],
+                                                            paper_bgcolor=app_color["graph_bg"],
+                                                        )
+                                                    ),
+                                                    className="graph graph--wind-direction"
+                                                ),
+                                            ],
+                                            className="wind-graphs",
                                         ),
                                     ],
-                                    className="wind-graphs",
-                                ),
-
-                                html.Figure(
-                                    [
-                                        html.Div([
-                                            html.Span(id="windchill_text", className="value"),
-                                            html.Span(id="windchill_past_text", className="past-value"),
-                                            html.Span(["°C"], className="unit"),
-                                        ]),
-                                        html.Figcaption(["Windchill"], className="figcaption"),
-                                    ],
-                                    className="figure figure--last-windchill",
+                                    className="box__inner box__inner--title-and-graph box__inner--wind-graphs",
                                 ),
                             ],
                             className="box box--temperature-and-wind",
@@ -275,7 +394,7 @@ app.layout = html.Div(
                                 html.Figure(
                                     [
                                         html.Div([
-                                            html.Span(id="barometric_pressure_qfe_text", className="value"),
+                                            html.Span(id="barometric_pressure_qfe_last_value", className="value"),
                                             html.Span(["hPa"], className="unit"),
                                         ]),
                                         html.Figcaption(["Luftdruck"], className="figcaption"),
@@ -290,7 +409,7 @@ app.layout = html.Div(
                                 html.Figure(
                                     [
                                         html.Div([
-                                            html.Span(id="water_temperature_text", className="value"),
+                                            html.Span(id="water_temperature_last_value", className="value"),
                                             html.Span(["°C"], className="unit"),
                                         ]),
                                         html.Figcaption(["Wassertemperatur"], className="figcaption"),
@@ -305,7 +424,7 @@ app.layout = html.Div(
                                 html.Figure(
                                     [
                                         html.Div([
-                                            html.Span(id="humidity_text", className="value"),
+                                            html.Span(id="humidity_last_value", className="value"),
                                             html.Span(["%"], className="unit"),
                                         ]),
                                         html.Figcaption(["Luftfeuchtigkeit"], className="figcaption"),
@@ -320,7 +439,7 @@ app.layout = html.Div(
                                 html.Figure(
                                     [
                                         html.Div([
-                                            html.Span(id="dew_point_text", className="value"),
+                                            html.Span(id="dew_point_last_value", className="value"),
                                             html.Span(["°C"], className="unit"),
                                         ]),
                                         html.Figcaption(["Taupunkt"], className="figcaption"),
@@ -335,114 +454,6 @@ app.layout = html.Div(
                 ),
             ],
             className="section section--general"
-        ),
-        html.Div(
-            [
-                # Prosa
-                html.Div(
-                    [
-                        # Text about …
-                        html.Div(
-                            [
-                                html.H3("Titel 1"),
-                                html.P("Das ist der Prosa-Text, der sich dann anpassen lässt und auch etwas länger sein wird, weil er eine Progrnosse macht"),
-                                html.Ul(
-                                    [
-                                        html.Li("Windgeschwindigkeit"),
-                                        html.Li("Böenspitzen"),
-                                        html.Li("Lufttemperatur"),
-                                    ],
-                                    className="prosa__list",
-                                ),
-                            ],
-                            className="box box--prosa",
-                        ),
-                        # Text about …
-                        html.Div(
-                            [
-                                html.H3("Titel der auch"),
-                                html.P("Das ist der Prosa-Text, der sich dann anpassen lässt und auch etwas länger sein wird, weil er eine Progrnosse macht"),
-                                html.Ul(
-                                    [
-                                        html.Li("Böenspitzen"),
-                                    ],
-                                    className="prosa__list",
-                                ),
-                            ],
-                            className="box box--prosa",
-                        ),
-                        html.Div(
-                            [
-                                html.H3("Starkwindwarnung"),
-                                html.P(id="strong_wind_warning_text"),
-                                # Das ist der Prosa-Text, der sich dann anpassen lässt und auch etwas länger sein wird, weil er eine Progrnosse macht
-                                html.Ul(
-                                    [
-                                        html.Li("Windgeschwindigkeit"),
-                                        html.Li("Böenspitzen"),
-                                    ],
-                                    className="prosa__list",
-                                ),
-                            ]
-                        ),
-                    ],
-                    className="section__inner section__inner--prosa",
-                    id="prosa",
-                ),
-            ],
-            className="section section--prosa",
-        ),
-        html.Div(
-            [
-                html.Div(
-                    [
-                        # Wind speed
-                        html.Div(
-                            [
-                                # html.Div(
-                                #     [
-                                #         html.Div("WIND SPEED (MPH)",
-                                #             className="graph__title")
-                                #     ]
-                                # ),
-
-                                # dcc.Interval(
-                                #     id="wind-speed-update",
-                                #     interval=int(GRAPH_INTERVAL),
-                                #     n_intervals=0,
-                                # ),
-                            ],
-                            className="figure figure--wind-speed",
-                        ),
-                        # Wind histogramm
-                        html.Div(
-                            [
-                                dcc.Graph(
-                                    id="wind-histogram",
-                                    figure=dict(
-                                        layout=dict(
-                                            plot_bgcolor=app_color["graph_bg"],
-                                            paper_bgcolor=app_color["graph_bg"],
-                                        )
-                                    ),
-                                ),
-                            ],
-                            id="windGraphContainer",
-                            className="figure figure--wind-histogram",
-                        ),
-                        # Wind speed rose
-                        html.Div(
-                            [
-
-                            ],
-                            id="gustGraphContainer",
-                            className="figure figure--wind-rose",
-                        ),
-                    ],
-                    className="section__inner section__inner--wind"
-                ),
-            ],
-            className="section section--wind",
         ),
     ],
     id="main",
@@ -463,30 +474,6 @@ app.clientside_callback(
 
 
 
-#
-# @app.callback(
-#     Output("air_temperature_text", "children"), [Input("update-interval", "n_intervals")],
-# )
-# def update_air_temperature_text(interval):
-#
-#     df = get_last_data()
-#     last_air_temperature = df["last_air_temperature"]
-#
-#     return last_air_temperature
-
-
-
-# @app.callback(
-#     Output("mean_air_temperature_text", "children"), [Input("update-interval", "n_intervals")],
-# )
-# def update_mean_air_temperature_text(interval):
-#
-#     df = get_all_data("7d")
-#     mean_air_temperature = round(df["air_temperature"].mean(), 2)
-#
-#     return mean_air_temperature
-#
-
 
 # Get all historic data
 dataframeli = get_all_historic_data("mythenquai")
@@ -495,160 +482,91 @@ dataframeli = get_all_historic_data("mythenquai")
 
 
 
-
 @app.callback(
     [
-        Output("air_temperature_current_text", "children"),
-        Output("air_temperature_forecast_1h_text", "children"),
-        Output("air_temperature_forecast_2h_text", "children"),
-        Output("air_temperature_forecast_4h_text", "children"),
+        Output("air_temperature_forecast_2h_value", "children"),
+        Output("air_temperature_forecast_5h_value", "children"),
+        Output("air_temperature_forecast_minmax_value", "children"),
     ],
     [Input("update-interval", "n_intervals")],
 )
-def update_air_temperature_texts(interval):
+def update_air_temperature_forecast_values_and_texts(interval):
 
     # get last entry as current air temperature
-    df_at = dataframeli["air_temperature"]
-    air_temperature_current = df_at.tail(1)
-    time_of_last_entry = (air_temperature_current.index.strftime('%H'))
-    time_of_last_entry2 = int(air_temperature_current.index.hour)
-    print('current_hour: {}'.format(time_of_last_entry))
-    print('current_hour2: {}'.format(time_of_last_entry2))
+    df_at = dataframeli["mean_air_temperature"]
+    air_temperature_last = df_at.tail(1)
+    #air_temperature_last_update_text = "Heute, {}".format((air_temperature_last.index[0]).strftime('%H:%M Uhr'))
 
     # Forecast air temperature with historic data
     # Forecast the air temperature for 1 hour, 2 hours and 4 hours
-    air_temperature_forecast = np.array(["N/A", "N/A", "N/A"])
-
-    # create copy of air temperature dataframe
-    df_at_forecast = df_at.copy()
-
-    # Select data in current timeframe: +/- 3 hours
-    #df_at_forecast = df_at_forecast[(df_at_forecast.index.dt.month == now.month round_down(air_temperature_current - 1)) & (df_at_forecast.values < round_up(air_temperature_current + 1))]
-
-    # result = data[(data['timestamp_cet'].dt.month == now.month) & (data['timestamp_cet'].dt.day == now.day) & (
-    # Select data in current timeframe: +/- 15 days
-
-    # Select data in current air temperature range: +/- 2 degree
-    df_at_forecast = df_at_forecast[(df_at_forecast.values > round_down(air_temperature_current - 1)) & (df_at_forecast.values < round_up(air_temperature_current + 1))]
-
-    # check for data after filtering (will return 0 if temperature is out of normal range)
-    # TODO: handle extreme lows or highs
-    if df_at_forecast.shape[0] > 0:
-
-        #print('df_at_forecast after filtering')
-        print(df_at_forecast.shape[0])
-
-        #df_at_forecast = df_at_forecast[]
+    air_temperature_forecast = np.array(["n/a", "n/a", "n/a"])
 
 
-    return air_temperature_current, air_temperature_forecast[0], air_temperature_forecast[1], air_temperature_forecast[2]
+
+
+    return air_temperature_forecast[0],\
+           air_temperature_forecast[1],\
+           air_temperature_forecast[2]
 
 
 
 
 @app.callback(
     [
-        Output("windchill_text", "children"),
-        Output("windchill_past_text", "children"),
+        Output("air_temperature_last_value", "children"),
+        Output("windchill_last_value", "children"),
+        Output("last-values__text", "children"),
+        Output("barometric_pressure_qfe_last_value", "children"),
+        Output("dew_point_last_value", "children"),
+        Output("humidity_last_value", "children"),
+        Output("water_temperature_last_value", "children"),
     ],
     [Input("update-interval", "n_intervals")],
 )
-def update_windchill_texts(interval):
+def update_last_values_and_texts(interval):
 
-    df = get_last_data()
-    last_windchill = df["last_windchill"]
+    df = get_last_data("mythenquai")
 
-    return last_windchill, "guguseli"
+    air_temperature_last_value = float(df["last_air_temperature"].values)
+    windchill_last_value = float(df["last_windchill"].values)
+    dew_point_last_value = float(df["last_dew_point"].values)
+    barometric_pressure_qfe_last_value = float(df["last_barometric_pressure_qfe"].values)
+    humidity_last_value = float(df["last_humidity"].values)
+    water_temperature_last_value = float(df["last_water_temperature"].values)
 
+    df_last_air_temperature_entry_timestamp = get_last_timestamp_of_entry("mythenquai", "air_temperature")
 
+    # calculate difference between mean of last week and current air temperature
+    df_compare = get_mean_value_of_last_week_between_time(
+        "air_temperature",
+        "7d",
+        df_last_air_temperature_entry_timestamp.index.time[0],
+        df_last_air_temperature_entry_timestamp.index.time[0]
+    )
+    mean_air_temperature_of_last_week_between_time = float(df_compare.values)
+    abs_difference_of_temperatures = abs(mean_air_temperature_of_last_week_between_time - air_temperature_last_value)
 
-@app.callback(
-    Output("water_temperature_text", "children"), [Input("update-interval", "n_intervals")],
-)
-def update_water_temperature_text(interval):
+    # …show corresponding message
+    last_values_text = "Die aktuelle Lufttemperatur ist "
+    if (air_temperature_last_value < mean_air_temperature_of_last_week_between_time):
+        last_values_text += """{}° Celsius tiefer als"""
+    elif (air_temperature_last_value == mean_air_temperature_of_last_week_between_time):
+        last_values_text += """gleich wie """
+    else:
+        last_values_text += """{}° Celsius höher als """
+    last_values_text += "in den letzten 7 Tagen zu dieser Tageszeit."
+    last_values_text = last_values_text.format(format(abs_difference_of_temperatures, '.1f'))
 
-    df = get_last_data()
-    last_water_temperature = df["last_water_temperature"]
-
-    return last_water_temperature
-
-
-
-
-@app.callback(
-    Output("humidity_text", "children"), [Input("update-interval", "n_intervals")],
-)
-def update_humidity_text(interval):
-
-    df = get_last_data()
-    last_humidity = df["last_humidity"]
-
-    return last_humidity
-
-
-
-
-@app.callback(
-    Output("dew_point_text", "children"), [Input("update-interval", "n_intervals")],
-)
-def update_dew_point_text(interval):
-
-    df = get_last_data()
-    last_dew_point = df["last_dew_point"]
-
-    return last_dew_point
+    return str(air_temperature_last_value),\
+           str(windchill_last_value), \
+           last_values_text, \
+           str(barometric_pressure_qfe_last_value),\
+           str(dew_point_last_value),\
+           str(humidity_last_value),\
+           str(water_temperature_last_value)
 
 
 
-
-
-@app.callback(
-    Output("barometric_pressure_qfe_text", "children"), [Input("update-interval", "n_intervals")],
-)
-def update_barometric_pressure_qfe_text(interval):
-
-    df = get_last_data()
-    last_barometric_pressure_qfe = df["last_barometric_pressure_qfe"]
-
-    return last_barometric_pressure_qfe
-
-
-
-
-
-
-# Selectors -> air temperature graph
-# @app.callback(
-#     Output("air_temperature_graph", "figure")
-# )
-# def make_air_temperature_figure():
-#
-#     layout_count = copy.deepcopy(layout)
-#
-#     dataframeli = get_air_temperature()
-#     x = dataframeli["air_temperature"].index
-#     # y0 = dataframeli["air_temperature"].index
-#     y1 = dataframeli["air_temperature"]
-#
-#     trace_air_temperature = dict(
-#         type="box",
-#         y=y1,
-#         x=x,
-#         name='',
-#         marker_color='#FF4136'
-#     )
-#
-#     data = [trace_air_temperature]
-#
-#     # return {
-#     #     'data': data,
-#     #     'layout': go.Layout(
-#     #         title='Lufttemperatur in Celsius'
-#     #     )
-#     # }
-#
-#     return dict(data=data, layout=layout_count)
-#
 # # Selectors -> water temperature graph
 # @app.callback(
 #     Output("water_temperature_graph", "figure")
@@ -708,17 +626,6 @@ def update_barometric_pressure_qfe_text(interval):
 
 
 
-@app.callback(
-    Output("strong_wind_warning_text", "children"), [Input("update-interval", "n_intervals")],
-)
-def update_strong_wind_warning_text(interval):
-
-    #df = get_last_data()
-    #last_barometric_pressure_qfe = df["strong_wind_warning_text"]
-
-    return dt.datetime.now()
-
-
 
 
 
@@ -728,19 +635,20 @@ def update_strong_wind_warning_text(interval):
 @app.callback(
     Output("air_temperature", "figure"), [Input("update-interval", "n_intervals")]
 )
-def gen_air_temperature(interval):
+def gen_air_temperature_and_windchill_graph(interval):
     """
-    Generate the wind speed graph.
+    Generate the air temperature and windchill graph.
     :params interval: update the graph based on an interval
     """
 
-    df = get_single_column("air_temperature", "420m")
+    df_at = get_single_column("air_temperature", "420m")
+    df_wc = get_single_column("windchill", "420m")
 
     trace_air_temperature = dict(
         type="scatter",
-        y=df["air_temperature"].values,
-        x=df.index,
-        line={"color": "#42C4F7"},
+        y=df_at["air_temperature"].values,
+        x=df_at.index,
+        line={"color": "#ffa6bd"},
         hoverinfo="skip",
         # error_y={
         #     "type": "data",
@@ -752,10 +660,19 @@ def gen_air_temperature(interval):
         mode="lines+markers",
     )
 
+    trace_windchill = dict(
+        type="scatter",
+        y=df_wc["windchill"].values,
+        x=df_wc.index,
+        line={"color": "#a49ef2"},
+        hoverinfo="skip",
+        mode="lines+markers",
+    )
+
     layout = dict(
         plot_bgcolor=app_color["transparent"],
         paper_bgcolor=app_color["transparent"],
-        margin=dict(l=10, r=10, b=0, t=20),
+        margin=dict(l=0, r=20, b=10, t=20),
         hovermode="closest",
         showlegend=False,
         height=120,
@@ -764,12 +681,12 @@ def gen_air_temperature(interval):
             size=12,
             color="#7f7f7f"
         ),
-
         xaxis={
             "showgrid": False,
             "zeroline": False,
             "tickformat": "%H:%M",
             "side": "top",
+            "fixedrange": True,
         },
         yaxis={
             "showgrid": False,
@@ -779,7 +696,7 @@ def gen_air_temperature(interval):
         },
     )
 
-    return dict(data=[trace_air_temperature], layout=layout)
+    return dict(data=[trace_air_temperature, trace_windchill], layout=layout)
 
 
 
@@ -831,54 +748,57 @@ def gen_wind_speed(interval):
     )
 
     layout = dict(
-        plot_bgcolor=app_color["graph_bg"],
-        paper_bgcolor=app_color["graph_bg"],
-        #font={"color": "#000000"},
-
-
-        #autosize=True,
-        #automargin=True,
-        margin=dict(l=40, r=10, b=40, t=20),
+        plot_bgcolor=app_color["transparent"],
+        paper_bgcolor=app_color["transparent"],
+        margin=dict(l=0, r=20, b=10, t=20),
         hovermode="closest",
-        #legend=dict(font=dict(size=10), orientation="v"),
-        legend={
-            "orientation": "h",
-            "yanchor": "bottom",
-            "xanchor": "center",
-            "y": 1,
-            "x": 0.5,
-        },
-        #showlegend=False,
-        height=350,
-        #width='100%',
-        #title="Windgeschwindigkeit in Metern pro Sekunde",
+        showlegend=False,
+        height=150,
+        font=dict(
+            family="Dosis, Arial",
+            size=12,
+            color="#7f7f7f"
+        ),
 
-        #showticklabels=True,
+        # xaxis={
+        #     "range": [0, 24],
+        #     "showline": True,
+        #     "zeroline": False,
+        #     "fixedrange": True,
+        #     "tickvals": [0, 6, 12, 18, 24],
+        #     "ticktext": ["4", "3", "2", "1", "0"],
+        #     "title": "Verstrichene Zeit in Stunden",
+        #     #"nticks": 5,
+        #     "gridcolor": app_color["graph_gridline"],
+        # },
+        # yaxis={
+        #     "range": [
+        #         0,
+        #         max(max_wind_gust_in_serie + 1, max_wind_speed_in_serie + 1),
+        #     ],
+        #     "showgrid": True,
+        #     "showline": True,
+        #     "fixedrange": False,
+        #     "zeroline": False,
+        #     "title": "m/s",
+        #     "gridcolor": app_color["graph_gridline"],
+        #     #"nticks": max(5, round(df["wind_speed_avg_10min"].iloc[-1] / 6)),
+        # },
 
-        xaxis={
-            "range": [0, 24],
-            "showline": True,
+        xaxis = {
+            "showgrid": False,
             "zeroline": False,
+            "tickformat": "%H:%M",
+            "side": "top",
             "fixedrange": True,
-            "tickvals": [0, 6, 12, 18, 24],
-            "ticktext": ["4", "3", "2", "1", "0"],
-            "title": "Verstrichene Zeit in Stunden",
-            #"nticks": 5,
-            "gridcolor": app_color["graph_gridline"],
         },
-        yaxis={
-            "range": [
-                0,
-                max(max_wind_gust_in_serie + 1, max_wind_speed_in_serie + 1),
-            ],
-            "showgrid": True,
-            "showline": True,
-            "fixedrange": False,
+        yaxis = {
+            "showgrid": False,
+            "showline": False,
             "zeroline": False,
-            "title": "m/s",
-            "gridcolor": app_color["graph_gridline"],
-            #"nticks": max(5, round(df["wind_speed_avg_10min"].iloc[-1] / 6)),
+            "side": "right",
         },
+
     )
 
     return dict(data=[trace_speed, trace_gust], layout=layout)
@@ -922,13 +842,13 @@ def gen_wind_direction(interval):
     ]
 
     layout = dict(
-        height=300,
-        margin=dict(l=40, r=10, b=40, t=20),
+        height=200,
+        margin=dict(l=10, r=10, b=10, t=10),
         hovermode="closest",
         legend=dict(font=dict(size=10), orientation="v"),
         showlegend=False,
-        plot_bgcolor=app_color["graph_bg"],
-        paper_bgcolor=app_color["graph_bg"],
+        plot_bgcolor=app_color["transparent"],
+        paper_bgcolor=app_color["transparent"],
         font={"color": "#000"},
         autosize=False,
         polar={
@@ -939,164 +859,6 @@ def gen_wind_direction(interval):
     )
 
     return dict(data=data, layout=layout)
-
-
-
-
-
-
-@app.callback(
-    Output("wind-histogram", "figure"),
-    [Input("update-interval", "n_intervals")],
-    [
-        State("wind-speed", "figure"),
-    ],
-)
-def gen_wind_histogram(interval, wind_speed_figure):
-    """ TODO: check comment
-    Genererate wind histogram graph.
-    :params interval: upadte the graph based on an interval
-    :params wind_speed_figure: current wind speed graph
-    :params slider_value: current slider value
-    :params auto_state: current auto state
-    """
-
-    wind_val = []
-
-    try:
-        # Check to see whether wind-speed has been plotted yet
-        if wind_speed_figure is not None:
-            wind_val = wind_speed_figure["data"][0]["y"]
-        # if "Auto" in auto_state:
-        #     bin_val = np.histogram(
-        #         wind_val,
-        #         bins=range(int(round(min(wind_val))), int(round(max(wind_val)))),
-        #     )
-        # else:
-        #     bin_val = np.histogram(wind_val, bins=slider_value)
-        #     print('bin_val: {}'.format(bin_val))
-
-        bin_val = np.histogram(
-            wind_val,
-            #bins=range(int(round(min(wind_val))), int(round(max(wind_val)))),
-        )
-
-    except Exception as error:
-        raise PreventUpdate
-
-    #
-    # dataframeli = get_wind_data("72h")
-    # wind_vals = dataframeli["wind_force_avg_10min"].values
-    #
-    # print(wind_val)
-    # print(wind_val[0])
-    #
-    # print(wind_vals)
-    # print(wind_vals[0])
-
-    avg_val = float(sum(wind_val)) / len(wind_val)
-    median_val = np.median(wind_val)
-
-    pdf_fitted = rayleigh.pdf(
-        bin_val[1], loc=(avg_val) * 0.55, scale=(bin_val[1][-1] - bin_val[1][0]) / 3
-    )
-
-    y_val = (pdf_fitted * max(bin_val[0]) * 20,)
-    y_val = (pdf_fitted * max(bin_val[0]), 0)
-    #print('y_val: {}'.format(y_val))
-    y_val_max = max(y_val[0])
-    bin_val_max = max(bin_val[0])
-
-    trace = dict(
-        type="bar",
-        x=bin_val[1],
-        y=bin_val[0],
-        marker={"color": app_color["graph_line"]},
-        showlegend=True,
-        hoverinfo="x+y",
-    )
-
-    traces_scatter = [
-        {"line_dash": "dash", "line_color": "#2E5266", "name": "Average"},
-        {"line_dash": "dot", "line_color": "#BD9391", "name": "Median"},
-    ]
-
-    scatter_data = [
-        dict(
-            type="scatter",
-            x=[bin_val[int(len(bin_val) / 2)]],
-            y=[0],
-            mode="lines",
-            line={"dash": traces["line_dash"], "color": traces["line_color"]},
-            marker={"opacity": 0},
-            visible=True,
-            name=traces["name"],
-        )
-        for traces in traces_scatter
-    ]
-
-    trace3 = dict(
-        type="scatter",
-        mode="lines",
-        line={"color": "#42C4F7"},
-        y=y_val[0],
-        x=bin_val[1][: len(bin_val[1])],
-        name="Rayleigh Fit",
-    )
-    layout = dict(
-        height=350,
-        margin=dict(l=40, r=0, b=40, t=20),
-        plot_bgcolor=app_color["graph_bg"],
-        paper_bgcolor=app_color["graph_bg"],
-        font={"color": "#000"},
-        xaxis={
-            "title": "Windgeschwindigkeit (m/s)",
-            "showgrid": False,
-            "showline": False,
-            "fixedrange": True,
-        },
-        yaxis={
-            "showgrid": False,
-            "showline": False,
-            "zeroline": False,
-            "title": "Number of Samples",
-            "fixedrange": True,
-        },
-        #autosize=True,
-        bargap=0.01,
-        bargroupgap=0,
-        hovermode="closest",
-        legend={
-            "orientation": "h",
-            "yanchor": "bottom",
-            "xanchor": "center",
-            "y": 1,
-            "x": 0.5,
-        },
-        shapes=[
-            {
-                "xref": "x",
-                "yref": "y",
-                "y1": int(max(bin_val_max, y_val_max)) + 0.5,
-                "y0": 0,
-                "x0": avg_val,
-                "x1": avg_val,
-                "type": "line",
-                "line": {"dash": "dash", "color": "#2E5266", "width": 5},
-            },
-            {
-                "xref": "x",
-                "yref": "y",
-                "y1": int(max(bin_val_max, y_val_max)) + 0.5,
-                "y0": 0,
-                "x0": median_val,
-                "x1": median_val,
-                "type": "line",
-                "line": {"dash": "dot", "color": "#BD9391", "width": 5},
-            },
-        ],
-    )
-    return dict(data=[trace, scatter_data[0], scatter_data[1], trace3], layout=layout)
 
 
 
