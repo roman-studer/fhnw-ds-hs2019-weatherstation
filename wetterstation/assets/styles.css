@@ -43,157 +43,17 @@ body {
 
     line-height: inherit;
     font-weight: normal;
-    font-family: "Montserrat", "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Dosis", "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #000;
-    background-color: #b7fae6;
+    background-color: #fbfcfd;
 }
 
-.section {
-    padding: 1rem 3rem;
-    position: relative;
-    z-index: 2;
-}
-
-/* Intro */
-.section--intro {
-    padding: 0;
-}
-
-/* General */
-.section--general {
-    padding-top: 0;
-}
-.section__inner--general {
-    display: grid;
-    grid-gap: 2rem;
-    /*grid-template-areas:
-        "header header header header controller controller"
-        "one one two two three four"
-        "wind-1 wind-1 wind-2 wind-2 wind-3 wind-3"
-        "airt airt airt windt windt windt"
-        "stuff stuff stuff stuff stuff stuff";*/
-    grid-template-rows: auto;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, auto);
-    grid-auto-rows: auto;
-}
-
-/* Wind */
-.section--wind {
-    background-color: #fff;
-}
-.section__inner--wind {
-    display: grid;
-    grid-gap: 0.5rem;
-    grid-template-areas:
-        "wind-speed wind-speed wind-rose wind-rose wind-histogram wind-histogram";
-    grid-template-rows: 1fr;
-}
-
-
-.section--prosa {
-    background-color: #062b4a;
-    color: #fff;
-}
-
-.section__inner--prosa {
-    display: grid;
-    grid-gap: 3rem;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: auto;
-}
-
-.figure--wind-speed {
-    grid-area: wind-speed;
-}
-.figure--wind-rose {
-    grid-area: wind-rose;
-}
-.figure--wind-histogram {
-    grid-area: wind-histogram;
-}
-.section--stuff {
-}
-
-
-.box {
-    background-color: #fff;
-    border-radius: 25px;
-    overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, .15);
-}
-
-
-.figure {
-    margin: 0;
-}
-.figure span {
-    display: inline-block;
-    letter-spacing: -0.05rem;
-}
-.figure .value {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-right: 0.25rem;
-}
-.figure .unit {
-    font-size: 1.25rem;
-    position: relative;
-    top: -0.5rem;
-    font-weight: 300;
-    opacity: 0.4;
-}
-.figure figcaption {
-    text-transform: uppercase;
-    font-size: 0.6rem;
-    font-weight: 500;
-    opacity: 0.6;
-}
-
-
-
-
-.grid {
-    /*margin: 1rem;
-    display: grid;
-    grid-template-columns: auto;
-    grid-gap: 1rem;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "header header header header controller controller"
-        "one one two two three four"
-        "wind-1 wind-1 wind-2 wind-2 wind-3 wind-3"
-        "airt airt airt windt windt windt"
-        "stuff stuff stuff stuff stuff stuff";
-    grid-template-rows: auto;
-    grid-template-columns: repeat(6, 1fr);*/
-}
-
-
-.weather-icon {
-    position: absolute;
-    z-index: 1;
-    top: -33vh;
-    right: 0;
-    left: 0;
-}
-.weather-icon img {
-    display: block;
-    margin: auto;
-    width: 66.666%;
-    height: auto;
-}
-
-.header {
-    padding: 1rem 3rem;
-}
-
+/* Basics */
 
 h1 {
     margin: 0;
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.1rem;
+    font-size: 1.75rem;
+    font-weight: 700;
 }
 h2 {
     margin: 0;
@@ -201,51 +61,316 @@ h2 {
     font-weight: bold;
     text-align: center;
 }
-h3 {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #fff;
-    margin: 0.5rem 0;
-}
-h4 {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #fff;
-    opacity: 0.8;
-    margin: 1.5rem 0 1rem 0;
-}
-h5 {
-    font-size: 0.85rem;
-    letter-spacing: 0.125rem;
-    font-weight: 600;
-    color: #767676;
-    margin: 0.5rem 0 0 0;
-    text-align: center;
-}
+
 p {
     margin: 0 0 0.25rem 0;
     font-size: 0.8rem;
+    line-height: 1.35;
     font-weight: 400;
 }
 
-.controller {
-    position: fixed;
-    right: 1rem;
-    top: 1rem;
-    background-color: white;
-    z-index: 10;
+.figure {
+    margin: 0;
+}
+.figure span {
+    display: inline-block;
+}
+.figure .value {
+    font-size: 2rem;
+    line-height: 1.1;
+    font-weight: bold;
+    margin-right: 0.25rem;
+}
+
+.figure .unit {
+    font-size: 1.25rem;
+    position: relative;
+    top: -0.5rem;
+    font-weight: 400;
+}
+/*.figure figcaption {
+    text-transform: uppercase;
+    font-size: 0.6rem;
+    font-weight: 500;
+    opacity: 0.6;
+}*/
+
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 1rem 2rem;
+}
+
+
+
+/* Main */
+.main {
+    padding: 0 2rem 2rem 2rem;
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-areas:
+        "aw aw aw aw aw aw w w w w w w"
+        "aw aw aw aw aw aw w w w w w w"
+        "aw aw aw aw aw aw p p p gr gr gr"
+        "m m m m m m p p p gr gr gr";
+    grid-auto-rows: auto;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 0.5fr 0.1fr 0.5fr 0.5fr;
+}
+
+/* Box */
+.box {
 
 }
-.prosa__list {
-    margin: 2rem 0 0 0;
-    padding: 0;
-    list-style: none;
+.box__header {
+    /*display: flex;
+    justify-content: space-between;*/
 }
-.prosa__list li {
-    display: inline-block;
-    background-color: rgba(255, 255, 255, 0.1);
-    font-size: 0.65rem;
-    margin: 0 0.3rem 0.3rem 0;
-    padding: 0.2rem 0.5rem;
-    border-radius: 2rem;
+.box__title {
+    font-size: 1rem;
+    margin: 0 0 0.75rem 0;
+    text-transform: uppercase;
 }
+.box__inner {
+    background-color: #fff;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 10px 70px rgba(0, 0, 0, .1);
+}
+
+.box__subtitle {
+    font-size: 0.85rem;
+    margin: 0 0 0.5rem 0;
+    text-align: left;
+    text-transform: uppercase;
+    border-bottom: 1px solid #dfdfdf;
+    padding-bottom: 0.5rem;
+}
+.box__smalltitle {
+    font-size: 0.75rem;
+    margin: 0 0 0.25rem 0;
+    text-align: left;
+    text-transform: uppercase;
+    color: #666666;
+}
+
+
+/* Switcher */
+.station-switcher__options {
+    display: flex;
+}
+.station-switcher__options label {
+    display: block;
+    /*padding: 0.75rem 1.5rem;*/
+    border-radius: 10px;
+    margin-right: 1rem;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #666;
+    transition: color 300ms ease-in-out;
+}
+.station-switcher__options label:hover {
+    /*background-color: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .05);*/
+    color: #000;
+}
+.station-switcher__options label:focus {
+    background-color: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .05);
+}
+.station-switcher__options label input {
+    margin-right: 0.5rem;
+}
+.station-switcher__options label input:checked {
+
+}
+
+
+
+
+/* Graphs */
+.graph {
+
+}
+.graph--bled-off {
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+}
+
+
+/* Air temperature and windchill */
+.air-temperature-and-windchill {
+    grid-area: aw;
+}
+.air-temperature-and-windchill__graph-wrapper {
+    background: linear-gradient(0deg, rgba(230,243,252,1) 0%, rgba(183,203,231,1) 100%);
+}
+.air-temperature-and-windchill__values {
+    padding: 1rem 1.5rem;
+    display: grid;
+    grid-gap: 1.5rem;
+    grid-template-columns: 1fr 2fr;
+    grid-template-areas:
+        'lv fc'
+        'h h';
+    grid-template-rows: auto;
+}
+.air-temperature-and-windchill__last-values {
+    grid-area: lv;
+}
+.air-temperature-and-windchill__last-values-grid {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    margin-bottom: 0.5rem;
+}
+.air-temperature-and-windchill__predicted-values-grid {
+    grid-area: fc;
+}
+.air-temperature-and-windchill__predicted-values-grid {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    margin-bottom: 0.5rem;
+}
+.air-temperature-and-windchill__historical-values {
+    grid-area: h;
+}
+
+.figure--windchill-last {
+    color: #847dde;
+}
+.figure--air-temperature-last {
+    color: rgb(255, 119, 161);
+}
+
+
+
+/* Wind speed, gust and force and wind rosed */
+/* grid layouting */
+.wind-speed-gust-and-force {
+    grid-area: w;
+}
+.wind-speed-gust-and-force__graph-wrapper {
+    background: linear-gradient(0deg, rgba(242, 215, 217,1) 0%, rgba(189, 222, 231,1) 100%);
+}
+.wind-speed-gust-and-force__graph-wrapper-grid {
+    display: grid;
+    grid-gap: 1.5rem;
+    grid-template-columns: 2.5fr 1fr;
+    grid-template-rows: 1fr;
+}
+.wind-speed-gust-and-force__values {
+    padding: 1rem 1.5rem;
+    display: grid;
+    grid-gap: 1.5rem;
+    grid-template-columns: 2fr 1fr;
+    grid-template-areas:
+        'lv fc';
+    grid-template-rows: auto;
+}
+.wind-speed-gust-and-force__last-values {
+    grid-area: lv;
+}
+.wind-speed-gust-and-force__last-values-grid {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    margin-bottom: 0.5rem;
+}
+.wind-speed-gust-and-force__predicted-values-grid {
+    grid-area: fc;
+}
+.wind-speed-gust-and-force__predicted-values-grid {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    margin-bottom: 0.5rem;
+}
+/*.wind-speed-gust-and-force__historical-values {
+    grid-area: h;
+}*/
+.figure--wind-speed-last {
+    color: #069dce;
+}
+.figure--wind-gust-last {
+    color: #0275a0;
+}
+.figure--wind-force-last {
+    color:rgb(0, 0, 0);
+}
+
+
+
+
+
+
+
+/* Precipitation */
+/* grid layouting */
+.precipitation {
+    grid-area: p;
+}
+.precipitation__graph-wrapper {
+    padding-top: 1rem;
+    background: linear-gradient(0deg, rgba(131, 182, 193,1) 0%, rgba(175, 204, 211,1) 100%);
+}
+.precipitation__graph-wrapper-grid {
+    display: grid;
+    grid-gap: 1.5rem;
+    grid-template-columns: 2.5fr 1fr;
+    grid-template-rows: 1fr;
+}
+
+
+
+
+
+/* Global radiation */
+/* grid layouting */
+.global-radiation {
+    grid-area: gr;
+}
+.global-radiation__graph-wrapper {
+    padding-top: 1rem;
+    background: linear-gradient(0deg, rgba(131, 182, 193,1) 0%, rgba(175, 204, 211,1) 100%);
+}
+.global-radiation__graph-wrapper-grid {
+    display: grid;
+    grid-gap: 1.5rem;
+    grid-template-columns: 2.5fr 1fr;
+    grid-template-rows: 1fr;
+}
+
+
+
+
+
+/* Air temperature and windchill */
+.more {
+    grid-area: m;
+}
+.more__values {
+    padding: 1rem 1.5rem;
+
+}
+.more__last-values {
+    grid-area: lv;
+}
+.more__last-values-grid {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: auto;
+    margin-bottom: 0.5rem;
+}
+
+
+

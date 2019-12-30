@@ -4,4 +4,7 @@ DB_NAME = 'meteorology'
 DB_USER = 'root'
 DB_PASSWORD = 'root'
 
-stations = ['mythenquai', 'tiefenbrunnen']
+STATIONS = {
+    "Mythenquai": "mythenquai",
+    "Tiefenbrunnen": "tiefenbrunnen",
+}
