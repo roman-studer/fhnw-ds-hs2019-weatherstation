@@ -15,7 +15,7 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-Make sure that Python 3.6+ is installed on your Raspberry Pi. 
+Make sure that Python 3.6+ is installed on your Raspberry Pi. Follow the instructions on https://medium.com/@isma3il/install-python-3-6-or-3-7-and-pip-on-raspberry-pi-85e657aadb1e
 
 Clone the repo then install the requirements for the weatherstation with pip3
 
@@ -28,16 +28,15 @@ pip3 install -r requirements.txt
 Import the data from the CSVs and the API into influxDB
 
 ```
-python import_data.py
+python3 import_data.py
 ```
 
-Wait till the import sleeps for 600 seconds. Then run the app with 
+Wait till the import sleeps for 600 seconds.
+In another terminal run the app with 
 
 ```
-python app.py
+python3 app.py
 ```
-
-in another terminal.
 
 ## About the app
 
