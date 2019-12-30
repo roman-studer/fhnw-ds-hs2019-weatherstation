@@ -1,8 +1,8 @@
-# Wetterstation für Segler
+# Weather station for sailors
 
 ## Getting Started
 
-### Die App lokal installieren
+### Installation on a Raspberry Pi
 
 First create a virtual environment with conda or venv inside a temp folder, then activate it.
 
@@ -15,27 +15,43 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-Clone the git repo, then install the requirements with pip
+Make sure that Python 3.6+ is installed on your Raspberry Pi. Follow the instructions on https://medium.com/@isma3il/install-python-3-6-or-3-7-and-pip-on-raspberry-pi-85e657aadb1e
+
+Clone the repo then install the requirements for the weatherstation with pip3
 
 ```
-git clone https://github.com/fabianjordi/fhnw-ds-hs2019-weatherstation
-cd fhnw-ds-has2019-weatherstation
-pip install -r requirements.txt
+$ git clone https://github.com/fabianjordi/fhnw-ds-hs2019-weatherstation
+$ cd fhnw-ds-hs2019-weatherstation
+$ pip3 install -r requirements.txt
+```
+
+Create a data folder
+```
+$ mkdir data && cd data
+```
+Save the CSVs with the following command in the data folder
+
+```
+$ wget https://raw.githubusercontent.com/markif/WeatherStation_HS2019/master/data/messwerte_mythenquai_2007-2018.csv
+$ wget https://raw.githubusercontent.com/markif/WeatherStation_HS2019/master/data/messwerte_tiefenbrunnen_2007-2018.csv
+$ wget https://raw.githubusercontent.com/markif/WeatherStation_HS2019/master/data/messwerte_mythenquai_2019.csv
+$ wget https://raw.githubusercontent.com/markif/WeatherStation_HS2019/master/data/messwerte_tiefenbrunnen_2019.csv
+cd ..
 ```
 
 Import the data from the CSVs and the API into influxDB
 
 ```
-python import_data.py
+$ cd wetterstation
+$ python3 import_data.py
 ```
 
-Wait till the import sleeps for 600 seconds. Then run the app with 
+Wait till the import sleeps for 600 seconds.
+In *another* terminal run the app with 
 
 ```
-python app.py
+$ python3 app.py
 ```
-
-in another terminal.
 
 ## About the app
 

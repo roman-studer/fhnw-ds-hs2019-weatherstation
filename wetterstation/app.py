@@ -7,28 +7,17 @@ import dash
 import datetime as dt
 import pandas as pd
 import numpy as np
-from dash.exceptions import PreventUpdate # TODO: remove
 import dash
 from dash.dependencies import Input, Output, State, ClientsideFunction
 import dash_core_components as dcc
 import dash_html_components as html
-from scipy.stats import rayleigh
-#from config import *
 from get_data import *
 from helpers import *
-#from sklearn import preprocessing TODO: remove
 
-from controls import COUNTIES, WELL_STATUSES, WELL_TYPES, WELL_COLORS
-
-
-# DEBUGGER
-import pdb
 
 
 
 # get relative data folder
-
-
 PATH = pathlib.Path(__file__).parent
 DATA_PATH = PATH.joinpath("data").resolve()
 GRAPH_INTERVAL = os.environ.get("GRAPH_INTERVAL", 10000)
