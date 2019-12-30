@@ -298,10 +298,10 @@ p {
     grid-area: h;
 }*/
 .figure--wind-speed-last {
-    color: blue;
+    color: #069dce;
 }
 .figure--wind-gust-last {
-    color: rgb(255, 119, 161);
+    color: #0275a0;
 }
 .figure--wind-force-last {
     color:rgb(0, 0, 0);

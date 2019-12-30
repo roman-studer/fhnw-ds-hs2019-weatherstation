@@ -947,7 +947,7 @@ def update_last_windchill_and_air_temperature_values_and_texts(interval, station
     air_temperature_last_value = float(df["last_air_temperature"].values)
     windchill_last_value = float(df["last_windchill"].values)
     dew_point_last_value = float(df["last_dew_point"].values)
-    barometric_pressure_qfe_last_value = float(df["last_barometric_pressure_qfe"].values)
+    barometric_pressure_qfe_last_value = int(round_up(float(df["last_barometric_pressure_qfe"].values), 0))
     humidity_last_value = float(df["last_humidity"].values)
     water_temperature_last_value = float(df["last_water_temperature"].values)
 
@@ -1117,7 +1117,7 @@ def gen_air_temperature_and_windchill_graph(interval, station_name):
     layout = dict(
         plot_bgcolor=app_color["transparent"],
         paper_bgcolor=app_color["transparent"],
-        margin=dict(l=0, r=20, b=10, t=20),
+        margin=dict(l=0, r=20, b=10, t=30),
         hoverinfo='x+y',
         showlegend=False,
         height=120,
@@ -1206,13 +1206,13 @@ def gen_historical_air_temperature_graph(interval, station_name):
     layout = dict(
         plot_bgcolor=app_color["transparent"],
         paper_bgcolor=app_color["transparent"],
-        margin=dict(l=0, r=20, b=40, t=0),
+        margin=dict(l=0, r=20, b=40, t=20),
         hoverinfo='x+y',
         showlegend=True,
         legend=dict(
-            yanchor='top',
+            yanchor='bottom',
             xanchor='center',
-            y=1.5,
+            y=-0.5,
             x=0.5,
             orientation="h",
         ),
@@ -1232,11 +1232,11 @@ def gen_historical_air_temperature_graph(interval, station_name):
         xaxis={
             "type": "date",
             "showgrid": False,
+            "side": "top",
             "zeroline": False,
             "tickformat": "%e. %b",
             'tick0': x[0],
             "dtick": 86400000.0 * 7,
-
         },
         yaxis={
             "showgrid": False,
@@ -1269,7 +1269,11 @@ def gen_wind_speed(interval, station_name):
     trace_speed = dict(
         type="scatter",
         y=df["wind_speed_avg_10min"],
-        line={"color": "#42C4F7"},
+        line=dict(
+            color="#069dce",
+            width=2,
+            smoothing=2,
+        ),
         hoverinfo="skip",
         # error_y={
         #     "type": "data",
@@ -1284,7 +1288,7 @@ def gen_wind_speed(interval, station_name):
     trace_gust = dict(
         type="scatter",
         y=df["wind_gust_max_10min"],
-        line={"color": "#42C4F7"},
+        line={"color": "#0275a0"},
         hoverinfo="skip",
         # error_y={
         #     "type": "data",
@@ -1300,7 +1304,7 @@ def gen_wind_speed(interval, station_name):
     layout = dict(
         plot_bgcolor=app_color["transparent"],
         paper_bgcolor=app_color["transparent"],
-        margin=dict(l=0, r=20, b=10, t=20),
+        margin=dict(l=0, r=20, b=10, t=30),
         hovermode="closest",
         showlegend=False,
         height=120,
@@ -1393,7 +1397,7 @@ def gen_wind_direction(interval):
 
     layout = dict(
         height=120,
-        margin=dict(l=10, r=10, b=10, t=10),
+        margin=dict(l=10, r=10, b=30, t=30),
         hovermode="closest",
         legend=dict(font=dict(size=10), orientation="v"),
         showlegend=False,
@@ -1438,86 +1442,109 @@ def gen_historical_precipitation_graph(interval, station_name):
     past_dayofyear = x[0].timetuple().tm_yday
     future_dayofyear = x[-1].timetuple().tm_yday
 
-    df_h = get_daily_value_of_past(station_name, "precipitation")
-    # Calculate daily mean air temperature grouped by month and day
-    gb_h = df_h.groupby([df_h.index.month, df_h.index.day]).mean().reset_index()
-    # only grab needed date frame
-    df_h = gb_h.loc[(gb_h.index > past_dayofyear) | (gb_h.index < future_dayofyear)]
-    #df_h = df_h.rolling(window=2, min_periods=1, axis=0).mean()
+    try:
 
-    df = get_daily_value_of_last_two_weeks(station_name, "precipitation")
+        df_h = get_daily_value_of_past(station_name, "precipitation")
+        # Calculate daily mean air temperature grouped by month and day
+        gb_h = df_h.groupby([df_h.index.month, df_h.index.day]).mean().reset_index()
+        # only grab needed date frame
+        df_h = gb_h.loc[(gb_h.index > past_dayofyear) | (gb_h.index < future_dayofyear)]
+        #df_h = df_h.rolling(window=2, min_periods=1, axis=0).mean()
 
-    trace_historical_air_temperature = dict(
-        type="scatter",
-        y=df_h["mean"].values,
-        x=x,
-        line=dict(
-            color="#000",
-            width=1,
-            smoothing=2,
-        ),
-        hoverinfo="skip",
-        mode="lines",
-        name="Historische Regenmenge",
-        line_shape='linear',
-    )
+        df = get_daily_value_of_last_two_weeks(station_name, "precipitation")
 
-    trace_air_temperature = dict(
-        type="scatter",
-        y=df["mean"].values,
-        x=df.index,
-        hoverinfo="skip",
-        mode="lines",
-        fill="tozeroy",
-        fillcolor="rgba(255, 119, 161, 0.2)",
-        name="Aktuelle Regenmenge",
-        line={"width": 0}
-    )
+        trace_historical_air_temperature = dict(
+            type="scatter",
+            y=df_h["mean"].values,
+            x=x,
+            line=dict(
+                color="#000",
+                width=1,
+                smoothing=2,
+            ),
+            hoverinfo="skip",
+            mode="lines",
+            name="Historische Regenmenge",
+            line_shape='linear',
+        )
 
-    layout = dict(
-        plot_bgcolor=app_color["transparent"],
-        paper_bgcolor=app_color["transparent"],
-        margin=dict(l=0, r=20, b=40, t=0),
-        hoverinfo='x+y',
-        showlegend=True,
-        legend=dict(
-            yanchor='top',
-            xanchor='center',
-            y=1.5,
-            x=0.5,
-            orientation="h",
-        ),
-        height=120,
-        font=dict(
-            family="Dosis, Arial",
-            size=12,
-            color="#7f7f7f"
-        ),
-        # xaxis={
-        #     "showgrid": False,
-        #     "zeroline": False,
-        #     "tickformat": "%b %d",
-        #     "side": "top",
-        #     "fixedrange": False,
-        # },
-        xaxis={
-            "type": "date",
-            "showgrid": False,
-            "zeroline": False,
-            "tickformat": "%e. %b",
-            'tick0': x[0],
-            "dtick": 86400000.0 * 7,
+        trace_air_temperature = dict(
+            type="scatter",
+            y=df["mean"].values,
+            x=df.index,
+            hoverinfo="skip",
+            mode="lines",
+            fill="tozeroy",
+            fillcolor="rgba(255, 119, 161, 0.2)",
+            name="Aktuelle Regenmenge",
+            line={"width": 0}
+        )
 
-        },
-        yaxis={
-            "showgrid": False,
-            "showline": False,
-            "zeroline": False,
-            "side": "right",
-        },
-    )
+        layout = dict(
+            plot_bgcolor=app_color["transparent"],
+            paper_bgcolor=app_color["transparent"],
+            margin=dict(l=0, r=20, b=40, t=0),
+            hoverinfo='x+y',
+            showlegend=True,
+            legend=dict(
+                yanchor='top',
+                xanchor='center',
+                y=1.5,
+                x=0.5,
+                orientation="h",
+            ),
+            height=120,
+            font=dict(
+                family="Dosis, Arial",
+                size=12,
+                color="#7f7f7f"
+            ),
+            # xaxis={
+            #     "showgrid": False,
+            #     "zeroline": False,
+            #     "tickformat": "%b %d",
+            #     "side": "top",
+            #     "fixedrange": False,
+            # },
+            xaxis={
+                "type": "date",
+                "showgrid": False,
+                "zeroline": False,
+                "tickformat": "%e. %b",
+                'tick0': x[0],
+                "dtick": 86400000.0 * 7,
 
-    return dict(data=[trace_historical_air_temperature, trace_air_temperature], layout=layout)
+            },
+            yaxis={
+                "showgrid": False,
+                "showline": False,
+                "zeroline": False,
+                "side": "right",
+            },
+        )
+
+        return dict(data=[trace_historical_air_temperature, trace_air_temperature], layout=layout)
+
+    except KeyError:
+
+
+
+        layout = dict(
+            plot_bgcolor=app_color["transparent"],
+            paper_bgcolor=app_color["transparent"],
+            annotation=
+            {
+                "text": "No matching data found",
+                "xref": "paper",
+                "yref": "paper",
+                "showarrow": False,
+                "font": {
+                    "size": 28
+                }
+            }
+        )
+
+        return dict(layout=layout)
 
 
 @app.callback(
@@ -1543,88 +1570,97 @@ def gen_historical_global_radiation_graph(interval, station_name):
     past_dayofyear = x[0].timetuple().tm_yday
     future_dayofyear = x[-1].timetuple().tm_yday
 
-    df_h = get_daily_value_of_past(station_name, "global_radiation")
-    # Calculate daily mean air temperature grouped by month and day
-    gb_h = df_h.groupby([df_h.index.month, df_h.index.day]).mean().reset_index()
-    # only grab needed date frame
-    df_h = gb_h.loc[(gb_h.index > past_dayofyear) | (gb_h.index < future_dayofyear)]
-    #df_h = df_h.rolling(window=2, min_periods=1, axis=0).mean()
+    try:
+        df_h = get_daily_value_of_past(station_name, "global_radiation")
 
-    df = get_daily_value_of_last_two_weeks(station_name, "global_radiation")
+        # Calculate daily mean air temperature grouped by month and day
+        gb_h = df_h.groupby([df_h.index.month, df_h.index.day]).mean().reset_index()
+        # only grab needed date frame
+        df_h = gb_h.loc[(gb_h.index > past_dayofyear) | (gb_h.index < future_dayofyear)]
+        #df_h = df_h.rolling(window=2, min_periods=1, axis=0).mean()
 
-    trace_historical_air_temperature = dict(
-        type="scatter",
-        y=df_h["mean"].values,
-        x=x,
-        line=dict(
-            color="#000",
-            width=1,
-            smoothing=2,
-        ),
-        hoverinfo="skip",
-        mode="lines",
-        name="Historische Regenmenge",
-        line_shape='linear',
-    )
+        df = get_daily_value_of_last_two_weeks(station_name, "global_radiation")
 
-    trace_air_temperature = dict(
-        type="scatter",
-        y=df["mean"].values,
-        x=df.index,
-        hoverinfo="skip",
-        mode="lines",
-        fill="tozeroy",
-        fillcolor="rgba(255, 119, 161, 0.2)",
-        name="Aktuelle Regenmenge",
-        line={"width": 0}
-    )
+        trace_historical_air_temperature = dict(
+            type="scatter",
+            y=df_h["mean"].values,
+            x=x,
+            line=dict(
+                color="#000",
+                width=1,
+                smoothing=2,
+            ),
+            hoverinfo="skip",
+            mode="lines",
+            name="Historische Regenmenge",
+            line_shape='linear',
+        )
 
-    layout = dict(
-        plot_bgcolor=app_color["transparent"],
-        paper_bgcolor=app_color["transparent"],
-        margin=dict(l=0, r=20, b=40, t=0),
-        hoverinfo='x+y',
-        showlegend=True,
-        legend=dict(
-            yanchor='top',
-            xanchor='center',
-            y=1.5,
-            x=0.5,
-            orientation="h",
-        ),
-        height=120,
-        font=dict(
-            family="Dosis, Arial",
-            size=12,
-            color="#7f7f7f"
-        ),
-        # xaxis={
-        #     "showgrid": False,
-        #     "zeroline": False,
-        #     "tickformat": "%b %d",
-        #     "side": "top",
-        #     "fixedrange": False,
-        # },
-        xaxis={
-            "type": "date",
-            "showgrid": False,
-            "zeroline": False,
-            "tickformat": "%e. %b",
-            'tick0': x[0],
-            "dtick": 86400000.0 * 7,
+        trace_air_temperature = dict(
+            type="scatter",
+            y=df["mean"].values,
+            x=df.index,
+            hoverinfo="skip",
+            mode="lines",
+            fill="tozeroy",
+            fillcolor="rgba(255, 119, 161, 0.2)",
+            name="Aktuelle Regenmenge",
+            line={"width": 0}
+        )
 
-        },
-        yaxis={
-            "showgrid": False,
-            "showline": False,
-            "zeroline": False,
-            "side": "right",
-        },
-    )
+        layout = dict(
+            plot_bgcolor=app_color["transparent"],
+            paper_bgcolor=app_color["transparent"],
+            margin=dict(l=0, r=20, b=40, t=0),
+            hoverinfo='x+y',
+            showlegend=True,
+            legend=dict(
+                yanchor='top',
+                xanchor='center',
+                y=1.5,
+                x=0.5,
+                orientation="h",
+            ),
+            height=120,
+            font=dict(
+                family="Dosis, Arial",
+                size=12,
+                color="#7f7f7f"
+            ),
+            # xaxis={
+            #     "showgrid": False,
+            #     "zeroline": False,
+            #     "tickformat": "%b %d",
+            #     "side": "top",
+            #     "fixedrange": False,
+            # },
+            xaxis={
+                "type": "date",
+                "showgrid": False,
+                "zeroline": False,
+                "tickformat": "%e. %b",
+                'tick0': x[0],
+                "dtick": 86400000.0 * 7,
 
-    return dict(data=[trace_historical_air_temperature, trace_air_temperature], layout=layout)
+            },
+            yaxis={
+                "showgrid": False,
+                "showline": False,
+                "zeroline": False,
+                "side": "right",
+            },
+        )
 
+        return dict(data=[trace_historical_air_temperature, trace_air_temperature], layout=layout)
 
+    except KeyError:
+
+        layout = dict(
+            plot_bgcolor=app_color["transparent"],
+            paper_bgcolor=app_color["transparent"],
+        )
+
+        return dict(data=[], layout=layout)
 
 
 
