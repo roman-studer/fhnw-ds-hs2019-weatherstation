@@ -5,12 +5,12 @@ import pandas as pd
 import scipy.stats as st
 from config import *
 
-# [ ] air_temperature(float)
-# [x] barometric_pressure_qfe(float)
-# [x] dew_point(float)
-# [ ] global_radiation(float)
-# [x] humidity(float)
-# [ ] precipitation(float)
+# [x] air_temperature(float)
+# [ ] barometric_pressure_qfe(float)
+# [ ] dew_point(float)
+# [x] global_radiation(float)
+# [ ] humidity(float)
+# [x] precipitation(float)
 # [ ] water_level(float)
 # [ ] water_temperature(float)
 # [x] wind_direction(float)
@@ -20,33 +20,38 @@ from config import *
 # [x] windchill(float)
 
 
+client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
 
 
-def get_all_data(time_back):
+def get_all_historic_data(station_name):
     """
-    Query all data
-    :params time_back: define time span (till now)
+    Query all historic data
     :returns: pandas dataframe object
     """
 
-    client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
+    #client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
 
-    query = """SELECT
-                *
-                FROM "meteorology"."autogen"."mythenquai" WHERE time >= now() - {}""".format(time_back)
+    # TODO: adjust query to retrieve all data
+    query = """SELECT 
+            mean(*)
+            FROM "meteorology"."autogen"."mythenquai"
+            WHERE time > 2015-01-01
+            GROUP BY time(1h)""".format(station_name)
 
-    df = pd.DataFrame(client.query(query)["mythenquai"])
+    df = pd.DataFrame(client.query(query)[station_name])
     return df
 
 
-def get_wind_data(time_back):
+
+
+def get_wind_data(station_name, time_back):
     """
     Query wind data
     :params time_back: define time span (till now)
     :returns: pandas dataframe object
     """
 
-    client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
+    #client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
 
     query = """SELECT 
                 wind_direction,
@@ -54,76 +59,109 @@ def get_wind_data(time_back):
                 wind_gust_max_10min,
                 wind_speed_avg_10min,
                 windchill
-                FROM "meteorology"."autogen"."mythenquai" WHERE time >= now() - {}""".format(time_back)
+                FROM "meteorology"."autogen"."{}" WHERE time >= now() - {}""".format(station_name, time_back)
 
-    df = pd.DataFrame(client.query(query)["mythenquai"])
+    df = pd.DataFrame(client.query(query)[station_name])
     return df
 
 
-
-def get_water_temperature(go_back):
+def get_daily_value_of_past(station_name, column_name):
     """
-    Query water temperature
+    Query mean value of column of all data per
+    :params station_name: station to query data from
+    :params column_name: column_name to query
     :returns: pandas dataframe object
     """
 
-    client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
-
     query = """SELECT 
-                water_temperature
-                FROM "meteorology"."autogen"."mythenquai" WHERE time >= now() - {}""".format(go_back)
+                mean({})
+                FROM "meteorology"."autogen"."{}"
+                WHERE time < now()
+                GROUP BY time(24h)""".format(column_name, station_name)
 
-    df = pd.DataFrame(client.query(query)["mythenquai"])
+    df = pd.DataFrame(client.query(query)[station_name])
     return df
 
 
-
-
-def get_air_temperature():
+def get_daily_value_of_last_two_weeks(station_name, column_name):
     """
-    Query air temperature
+    Query mean value of column of all data per
+    :params station_name: station to query data from
+    :params column_name: column_name to query
     :returns: pandas dataframe object
     """
 
-    client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
-
     query = """SELECT 
-                air_temperature
-                FROM "meteorology"."autogen"."mythenquai" WHERE time >= now() - 14d"""
+                mean({})
+                FROM "meteorology"."autogen"."{}"
+                WHERE time > now() - 14d
+                GROUP BY time(24h)""".format(column_name, station_name)
 
-    df = pd.DataFrame(client.query(query)["mythenquai"])
+    df = pd.DataFrame(client.query(query)[station_name])
     return df
 
 
-
-def get_single_column(column_name, back_from_now):
+def get_single_column(station_name, column_name, back_from_now):
     """
     Query single column
+    :params station_name: station to query data from
     :params column_name: column_name to query
     :params back_from_now: define time span for historic data
     :returns: pandas dataframe object
     """
 
-    client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
-
     query = """SELECT 
                 {}
-                FROM "meteorology"."autogen"."mythenquai" WHERE time >= now() - {}""".format(column_name, back_from_now)
+                FROM "meteorology"."autogen"."{}"
+                WHERE time >= now() - {}""".format(column_name, station_name, back_from_now)
 
-    df = pd.DataFrame(client.query(query)["mythenquai"])
+    df = pd.DataFrame(client.query(query)[station_name])
     return df
 
 
+def get_mean_value_of_last_week_between_time(station_name, column_name, back_from_now, time_start, time_end):
+    """
+    Get the mean value for the last week in specific time frame
+    :params station_name: station to query data from
+    :params column_name: column_name to query
+    :params back_from_now: define time span for historic data
+    :params time_start: hour and minutes (and seconds), e.g. "11:00" or "12:20:00"
+    :params time_end: hour and minutes (and seconds), e.g. "15:00" or "17:20:00"
+    :returns: pandas dataframe object with one row
+    """
 
-def get_last_data():
+    df = get_single_column(station_name, column_name, back_from_now)
+    df = df.between_time(time_start, time_end)
+    df = df.mean()
 
-    client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
+    return df
+
+
+def get_last_timestamp_of_entry(station_name, column_name):
+    """
+    Get last timestamp of single entry
+    :params station_name: station to query data from
+    :params column_name: column_name to query
+    :returns: pandas dataframe object with one row
+    """
+
+    query = """SELECT
+                last({}), time
+                FROM "meteorology"."autogen"."{}" """.format(column_name, station_name)
+
+    df = pd.DataFrame(client.query(query)[station_name])
+    return df
+
+
+def get_last_data(station_name):
+
+    #client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
 
     query = """SELECT
                 last(*)
-                FROM "meteorology"."autogen"."mythenquai" WHERE time > now() - 3h"""
+                FROM "meteorology"."autogen"."{}" """.format(station_name)
 
-    df = pd.DataFrame(client.query(query)["mythenquai"])
+    df = pd.DataFrame(client.query(query)[station_name])
     return df
 
 
