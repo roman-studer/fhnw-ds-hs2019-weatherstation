@@ -250,6 +250,15 @@ app.layout = html.Div(
                                                                                 className="value value--air-temperature-forecast"),
                                                                             html.Span(["°C"], className="unit"),
                                                                         ]),
+                                                                        # html.Div(
+                                                                        #     className="figure__additional",
+                                                                        #     children=[
+                                                                        #         html.Span(["±"], className="additional"),
+                                                                        #         html.Span(
+                                                                        #             id="air_temperature_forecast_4h_additional_value",
+                                                                        #             className="value-additional"),
+                                                                        #     ]
+                                                                        # ),
                                                                     ],
                                                                 ),
                                                             ],
@@ -290,6 +299,16 @@ app.layout = html.Div(
                                                                                 className="value value--air-temperature-forecast"),
                                                                             html.Span(["°C"], className="unit"),
                                                                         ]),
+                                                                        # html.Div(
+                                                                        #     className="figure__additional",
+                                                                        #     children=[
+                                                                        #         html.Span(["Min./Max."],
+                                                                        #                   className="additional"),
+                                                                        #         html.Span(
+                                                                        #             id="air_temperature_forecast_1d_minmax_value",
+                                                                        #             className="value-additional"),
+                                                                        #     ]
+                                                                        # ),
                                                                     ],
                                                                 ),
                                                             ],
@@ -316,20 +335,6 @@ app.layout = html.Div(
                                                         ),
                                                     ],
                                                 ),
-                                                # html.Div(
-                                                #     className="predicted-values__text",
-                                                #     children=[
-                                                #         html.P(
-                                                #             id="predicted-values__text",
-                                                #             className="paragraph",
-                                                #             children=[
-                                                #                 """Da sist ein Text, der auch etwas länger sein
-                                                #                 kann und was er auch soll, damit man das etwas spürt,
-                                                #                 wie sich längerer Text verhält und so."""
-                                                #             ],
-                                                #         ),
-                                                #     ],
-                                                # ),
                                             ],
                                         ),
                                         html.Div(
@@ -538,12 +543,12 @@ app.layout = html.Div(
                     ],
                 ),
 
-                # Box: Regen
+                # Box: Niederschlag
                 html.Div(
                     className="box precipitation",
                     children=[
                         html.H1(
-                            children=["Regen"],
+                            children=["Niederschlag"],
                             className="box__title",
                         ),
                         html.Div(
@@ -631,7 +636,7 @@ app.layout = html.Div(
                                                             id="global-radiation__text",
                                                             className="paragraph",
                                                             children=[
-                                                                "Das ist ein kurzer Text zum Niederschlag."
+                                                                "Das ist ein kurzer Text zur Sonnenstrahlung."
                                                             ],
                                                         ),
                                                     ],

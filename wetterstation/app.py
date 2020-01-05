@@ -37,6 +37,8 @@ def update_intro_text(interval, station_name):
         Output("air_temperature_forecast_2h_value", "children"),
         Output("air_temperature_forecast_4h_value", "children"),
         Output("air_temperature_forecast_8h_value", "children"),
+        Output("air_temperature_forecast_1d_value", "children"),
+        Output("air_temperature_forecast_2d_value", "children"),
     ], [
         Input("update-interval", "n_intervals"),
         Input("station-switcher__options", "value")
@@ -44,18 +46,9 @@ def update_intro_text(interval, station_name):
 )
 def update_air_temperature_forecast_values_and_texts(interval, station_name):
 
-    # get last entry as current air temperature
-    #df_at = dataframeli["mean_air_temperature"]
-    #air_temperature_last = df_at.tail(1)
-    #air_temperature_last_update_text = "Heute, {}".format((air_temperature_last.index[0]).strftime('%H:%M Uhr'))
+    values = get_air_temperature_forecast_values(station_name)
 
-    # Forecast air temperature with historic data
-    # Forecast the air temperature for 1 hour, 2 hours and 4 hours
-    air_temperature_forecast = np.array(["-4.7", "-4.7", "-4.7"])
-
-    return air_temperature_forecast[0],\
-           air_temperature_forecast[1],\
-           air_temperature_forecast[2]
+    return values[0], values[1], values[2], values[3], values[4]
 
 
 @app.callback(
@@ -81,15 +74,15 @@ def update_last_windchill_and_air_temperature_values_and_texts(interval, station
     humidity_last_value = float(df["last_humidity"].values)
     water_temperature_last_value = float(df["last_water_temperature"].values)
 
-    df_last_air_temperature_entry_timestamp = get_last_timestamp_of_entry(station_name, "air_temperature")
+    df_last_air_temperature_entry_timestamp = get_timestamp_of_last_entry(station_name, "air_temperature")
 
     # calculate difference between mean of last week and current air temperature
     df_compare = get_mean_value_of_last_week_between_time(
         station_name,
         "air_temperature",
         "7d",
-        df_last_air_temperature_entry_timestamp.index.time[0],
-        df_last_air_temperature_entry_timestamp.index.time[0]
+        df_last_air_temperature_entry_timestamp.time[0],
+        df_last_air_temperature_entry_timestamp.time[0]
     )
     mean_air_temperature_of_last_week_between_time = float(df_compare.values)
     abs_difference_of_temperatures = abs(mean_air_temperature_of_last_week_between_time - air_temperature_last_value)
@@ -444,8 +437,6 @@ def gen_wind_direction(interval):
 
     val = df["wind_speed_avg_10min"].iloc[-1]
     direction = [0, (df["wind_direction"][0] - 20), (df["wind_direction"][0] + 20), 0]
-
-
 
     traces_scatterpolar = [
         {"r": [0, val, val, 0], "fillcolor": "#084E8A"},

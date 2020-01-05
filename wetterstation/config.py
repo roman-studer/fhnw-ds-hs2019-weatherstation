@@ -2,7 +2,7 @@ import os
 import pathlib
 
 # Update interval
-GRAPH_INTERVAL = os.environ.get("GRAPH_INTERVAL", 20000) # 20 seconds TODO: change to 60seconds
+GRAPH_INTERVAL = os.environ.get("GRAPH_INTERVAL", 60000) # 60 seconds TODO: change to 60seconds
 WEBAPP_TITLE = "Wetterstation für SeglerInnen"
 
 # InfluxDB

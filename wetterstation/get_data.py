@@ -133,7 +133,7 @@ def get_mean_value_of_last_week_between_time(station_name, column_name, back_fro
     return df
 
 
-def get_last_timestamp_of_entry(station_name, column_name):
+def get_timestamp_of_last_entry(station_name, column_name):
     """
     Get last timestamp of single entry
     :params station_name: station to query data from
@@ -146,7 +146,7 @@ def get_last_timestamp_of_entry(station_name, column_name):
                 FROM "meteorology"."autogen"."{}" """.format(column_name, station_name)
 
     df = pd.DataFrame(client.query(query)[station_name])
-    return df
+    return df.index
 
 
 def get_last_data(station_name):
@@ -293,10 +293,6 @@ def get_data_in_current_time_period(data, days_back, days_forward):
     month_forward = int((last_entry.index[0] + dt.timedelta(days=days_forward)).strftime('%-m'))
     day_back = int((last_entry.index[0] + dt.timedelta(days=-days_back)).strftime('%-d'))
     day_forward = int((last_entry.index[0] + dt.timedelta(days=days_forward)).strftime('%-d'))
-    # print('month_back: {}'.format(month_back))
-    # print('day_back: {}'.format(day_back))
-    # print('month_forward: {}'.format(month_forward))
-    # print('day_forward: {}'.format(day_forward))
 
     df_filtered = data[
         ((data.index.month >= month_back) & (data.index.day >= day_back)
@@ -319,7 +315,7 @@ def get_barometric_pressure_in_current_time_period(station_name):
         query = """SELECT 
                     mean(barometric_pressure_qfe) AS mean_barometric_pressure_qfe
                     FROM "meteorology"."autogen"."{}"
-                    WHERE time > now() - 6h GROUP BY time(1h) fill(previous)""".format(station_name)
+                    WHERE time > now() - 4h GROUP BY time(1h) fill(previous)""".format(station_name)
 
         df = pd.DataFrame(client.query(query)[station_name])
 
@@ -453,6 +449,153 @@ def get_barometric_pressure_in_current_time_period(station_name):
 
         return """Fehler aufgetreten. Es liegen womöglich keine aktuellen
         Luftdruck- oder Windstärkedaten vor."""
+
+
+def get_air_temperature_forecast_values(station_name):
+    # get datetime of last entry
+    datetime_of_last_entry = get_timestamp_of_last_entry(station_name, "air_temperature")
+
+    # Get data for air temperature prediction
+    query = """SELECT
+            last(air_temperature) AS last_air_temperature,
+            last(dew_point) AS last_dew_point,
+            last(humidity) AS last_humidity,
+            last(barometric_pressure_qfe) AS last_barometric_pressure_qfe
+            FROM "meteorology"."autogen"."{}" """.format(station_name)
+
+    df_last = pd.DataFrame(client.query(query)[station_name])
+
+    last_air_temperature = float(df_last["last_air_temperature"].values)
+    last_dew_point = float(df_last["last_dew_point"].values)
+    last_humidity = float(df_last["last_humidity"].values)
+    last_barometric_pressure_qfe = float(df_last["last_barometric_pressure_qfe"].values)
+
+    # find similar conditions, stop if something found
+    # "simulate" HAVING clause
+    len_of_df = 0
+    factor = 0.05
+    while len_of_df <= 20:
+
+        query = """SELECT
+                (air_temperature),
+                (dew_point),
+                (humidity),
+                (barometric_pressure_qfe)
+                FROM "meteorology"."autogen"."{}"
+                WHERE
+                    (air_temperature > {} AND air_temperature < {})
+                    AND
+                    (dew_point > {} AND dew_point < {})
+                    AND
+                    (humidity > {} AND humidity < {})
+                    AND
+                    (barometric_pressure_qfe > {} AND barometric_pressure_qfe < {})
+                    AND
+                    (time < now() - 3d)""".format(
+            station_name,
+            last_air_temperature - factor * 1,
+            last_air_temperature + factor * 1,
+            last_dew_point - factor * 20,
+            last_dew_point + factor * 20,
+            last_humidity - factor * 20,
+            last_humidity + factor * 20,
+            last_barometric_pressure_qfe - factor * 40,
+            last_barometric_pressure_qfe + factor * 40)
+
+        df = pd.DataFrame(client.query(query)[station_name])
+        len_of_df = len(df)
+        factor += 0.1
+        if factor == 10:
+            break
+
+
+    # loop in widening day span, break if span is 60 (2 x 30) days
+    days_span = 0
+    len_of_df_f = 0
+
+    while len_of_df_f <= 10:
+
+        df_f = df.copy()
+        df_f = get_data_in_current_time_period(df_f, days_span, days_span)  # Filter for current time period
+
+        if days_span == 30:
+            break
+
+        len_of_df_f = len(df_f)
+        days_span += 1
+
+    # loop in widening timespan, break if dataframe has length of 1
+    minutes_span = 0
+    len_of_df_ff = 0
+    while len_of_df_ff <= 0:
+
+        df_ff = df_f.copy()
+        df_ff = df_ff.between_time(
+            ((datetime_of_last_entry + dt.timedelta(minutes=-minutes_span)).strftime('%H:%M'))[0],
+            ((datetime_of_last_entry).strftime('%H:%M'))[0]
+        )
+        if len(df_ff) == 1:
+            break
+
+        df_ff = df_ff.between_time(
+            ((datetime_of_last_entry).strftime('%H:%M'))[0],
+            ((datetime_of_last_entry + dt.timedelta(minutes=minutes_span)).strftime('%H:%M'))[0]
+        )
+        if len(df_ff) == 1:
+            break
+
+        len_of_df_ff = len(df_ff)
+        minutes_span += 10
+
+    # go 2 hours back and 6 forward, get min and max values
+    datetime_start = (df_ff.iloc[0:].index[0]
+        .replace(
+            hour=datetime_of_last_entry.hour[0],
+            minute=datetime_of_last_entry.minute[0]
+        )
+    )
+    datetime_end = (df_ff.iloc[0:].index[0] + dt.timedelta(days=3))
+
+    query = """SELECT
+                (air_temperature)
+                FROM "meteorology"."autogen"."{}"
+                WHERE
+                    (time >= '{}' AND time <= '{}')""".format(
+        station_name,
+        datetime_start.tz_localize(tz=None),
+        datetime_end.tz_localize(tz=None)
+    )
+
+    df_final = pd.DataFrame(client.query(query)[station_name])
+
+    starting_datetime = df_ff.iloc[0:].index[0]
+    forecast_values = []
+    try:
+        forecast_values.append(df_final.loc[starting_datetime + dt.timedelta(hours=2)].values)
+    except KeyError:
+        forecast_values.append('-')
+
+    try:
+        forecast_values.append(df_final.loc[starting_datetime + dt.timedelta(hours=4)].values)
+    except KeyError:
+        forecast_values.append('-')
+
+    try:
+        forecast_values.append(df_final.loc[starting_datetime + dt.timedelta(hours=8)].values)
+    except KeyError:
+        forecast_values.append('-')
+
+    try:
+        forecast_values.append(df_final.loc[(starting_datetime + dt.timedelta(hours=24)).replace(hour=12, minute=0)].values)
+    except KeyError:
+        forecast_values.append('-')
+
+    try:
+        forecast_values.append(df_final.loc[(starting_datetime + dt.timedelta(hours=48)).replace(hour=12, minute=0)].values)
+    except KeyError:
+        forecast_values.append('-')
+
+    return forecast_values
 
 
 def remove_outliers(df_in, col_name):
