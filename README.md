@@ -4,18 +4,8 @@
 
 ### Installation on a Raspberry Pi
 
-First create a virtual environment with conda or venv inside a temp folder, then activate it.
-
-```
-virtualenv venv
-
-# Windows
-venv\Scripts\activate
-# Or Linux
-source venv/bin/activate
-```
-
-Make sure that Python 3.6+ is installed on your Raspberry Pi. Follow the instructions on https://medium.com/@isma3il/install-python-3-6-or-3-7-and-pip-on-raspberry-pi-85e657aadb1e
+Make sure that Python 3.6+ is installed on your Raspberry Pi.
+Follow the instructions on https://medium.com/@isma3il/install-python-3-6-or-3-7-and-pip-on-raspberry-pi-85e657aadb1e
 
 Clone the repo then install the requirements for the weatherstation with pip3
 
@@ -25,21 +15,14 @@ $ cd fhnw-ds-hs2019-weatherstation
 $ pip3 install -r requirements.txt
 ```
 
-Create a data folder
-```
-$ mkdir data && cd data
-```
-Save the CSVs with the following command in the data folder
+Make sure you have influxDB installed **and running** on your Raspberry Pi.
+You mav follow the following instructions: http://blog.centurio.net/2018/10/28/howto-install-influxdb-and-grafana-on-a-raspberry-pi-3/
 
-```
-$ wget https://raw.githubusercontent.com/markif/WeatherStation_HS2019/master/data/messwerte_mythenquai_2007-2018.csv
-$ wget https://raw.githubusercontent.com/markif/WeatherStation_HS2019/master/data/messwerte_tiefenbrunnen_2007-2018.csv
-$ wget https://raw.githubusercontent.com/markif/WeatherStation_HS2019/master/data/messwerte_mythenquai_2019.csv
-$ wget https://raw.githubusercontent.com/markif/WeatherStation_HS2019/master/data/messwerte_tiefenbrunnen_2019.csv
-cd ..
-```
+Import the data from the CSVs and the API into influxDB.
 
-Import the data from the CSVs and the API into influxDB
+You may get an error saying the numpy c-extentions failed.
+Please consider https://stackoverflow.com/questions/58868528/importing-the-numpy-c-extensions-failed to fix this issue.
+After uninstalling numpy reinstall it via the requirements-installation as explained above.
 
 ```
 $ cd wetterstation
@@ -47,11 +30,17 @@ $ python3 import_data.py
 ```
 
 Wait till the import sleeps for 600 seconds.
-In *another* terminal run the app with 
+In **another** terminal run the app with 
 
 ```
 $ python3 app.py
 ```
+
+You may get an ImportError for file libf77blas.so.3.
+Follow the instructions on https://github.com/Kitt-AI/snowboy/issues/262 to fix this issue.
+
+Open chromium and goto 127.0.0.1:9000.
+Then press F11 to enter the fullscreen mode.
 
 ## About the app
 
