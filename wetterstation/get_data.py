@@ -595,16 +595,16 @@ def get_air_temperature_forecast_values(station_name):
     except KeyError:
         forecast_values.append('-')
 
-    try:
-        print(df_final.loc[datetime_start + dt.timedelta(hours=2)])
-        print(df_final.loc[datetime_start + dt.timedelta(hours=4)])
-        print(df_final.loc[datetime_start + dt.timedelta(hours=8)])
-        print(df_final.loc[(datetime_start + dt.timedelta(hours=24)).replace(hour=12, minute=0)])
-        print(df_final.loc[(datetime_start + dt.timedelta(hours=48)).replace(hour=12, minute=0)])
-
-
-    except:
-        print('fehler')
+    # try:
+    #     print(df_final.loc[datetime_start + dt.timedelta(hours=2)])
+    #     print(df_final.loc[datetime_start + dt.timedelta(hours=4)])
+    #     print(df_final.loc[datetime_start + dt.timedelta(hours=8)])
+    #     print(df_final.loc[(datetime_start + dt.timedelta(hours=24)).replace(hour=12, minute=0)])
+    #     print(df_final.loc[(datetime_start + dt.timedelta(hours=48)).replace(hour=12, minute=0)])
+    #
+    #
+    # except:
+    #     print('fehler')
 
     return forecast_values
 
