@@ -48,6 +48,28 @@ This app displays weather data from the "Mythenquai" and the "Tiefenbrunnen" wea
 There is a station switcher at the top right of the app to update the graphs below.
 By selecting or hovering over data in one plot will update the other plots ('cross-filtering').
 
+## Notebooks
+
+The documentation is saved as Jupyter Notebook as well as a PDF file.
+You can find them in
+ [Notebook/Wetterstation_Documentation.ipynb](Notebook/Wetterstation_Documentation.ipynb) 
+ and [Notebook/Wetterstation_Documentation.pdf](Notebook/Wetterstation_Documentation.pdf) respectively.
+
+Under the «tests» folder you can find some Notebook that were used to create the functions for the forecast as well as
+some files that were created for fun purposes.
+
+## Screenshot
+### Dashboard
+
+The dashboard shows some current weather data as well as some forecasts
+
+![dashboard](docs/visualization/dashboard.png "Dashboard")
+
 ## Built With
 
 - [Dash](https://dash.plot.ly/) - Main server and interactive components
+
+## Authors 
+- Fabian Jordi ([fabian.jordi@students.fhnw.ch](fabian.jordi@students.fhnw.ch))
+- Simon Luder ([simon.luder@students.fhnw.ch](simon.luder@students.fhnw.ch))
+- Roman Studer ([roman.studer1@students.fhnw.ch](roman.studer1@students.fhnw.ch))

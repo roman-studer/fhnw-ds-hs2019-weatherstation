@@ -563,32 +563,32 @@ app.layout = html.Div(
                                         ),
                                     ],
                                 ),
-                                html.Div(
-                                    className="precipitation__values",
-                                    children=[
-                                        html.Div(
-                                            className="precipitation__last-values",
-                                            children=[
-                                                # html.H2(
-                                                #     className="box__subtitle",
-                                                #     children=["Aktuelle Werte"],
-                                                # ),
-                                                html.Div(
-                                                    className="last-values__text",
-                                                    children=[
-                                                        html.P(
-                                                            id="precipitation__text",
-                                                            className="paragraph",
-                                                            children=[
-                                                                "Das ist ein kurzer Text zum Regen."
-                                                            ],
-                                                        ),
-                                                    ],
-                                                ),
-                                            ],
-                                        ),
-                                    ],
-                                ),
+                                # html.Div(
+                                #     className="precipitation__values",
+                                #     children=[
+                                #         html.Div(
+                                #             className="precipitation__last-values",
+                                #             children=[
+                                #                 # html.H2(
+                                #                 #     className="box__subtitle",
+                                #                 #     children=["Aktuelle Werte"],
+                                #                 # ),
+                                #                 # html.Div(
+                                #                 #     className="last-values__text",
+                                #                 #     children=[
+                                #                 #         html.P(
+                                #                 #             id="precipitation__text",
+                                #                 #             className="paragraph",
+                                #                 #             children=[
+                                #                 #                 "Das ist ein kurzer Text zum Regen."
+                                #                 #             ],
+                                #                 #         ),
+                                #                 #     ],
+                                #                 # ),
+                                #             ],
+                                #         ),
+                                #     ],
+                                # ),
                             ],
                         ),
                     ],
@@ -619,32 +619,32 @@ app.layout = html.Div(
                                         ),
                                     ],
                                 ),
-                                html.Div(
-                                    className="global-radiation__values",
-                                    children=[
-                                        html.Div(
-                                            className="global-radiation__last-values",
-                                            children=[
-                                                # html.H2(
-                                                #     className="box__subtitle",
-                                                #     children=["Aktuelle Werte"],
-                                                # ),
-                                                html.Div(
-                                                    className="last-values__text",
-                                                    children=[
-                                                        html.P(
-                                                            id="global-radiation__text",
-                                                            className="paragraph",
-                                                            children=[
-                                                                "Das ist ein kurzer Text zur Sonnenstrahlung."
-                                                            ],
-                                                        ),
-                                                    ],
-                                                ),
-                                            ],
-                                        ),
-                                    ],
-                                ),
+                                # html.Div(
+                                #     className="global-radiation__values",
+                                #     children=[
+                                #         html.Div(
+                                #             className="global-radiation__last-values",
+                                #             children=[
+                                #                 # html.H2(
+                                #                 #     className="box__subtitle",
+                                #                 #     children=["Aktuelle Werte"],
+                                #                 # ),
+                                #                 # html.Div(
+                                #                 #     className="last-values__text",
+                                #                 #     children=[
+                                #                 #         html.P(
+                                #                 #             id="global-radiation__text",
+                                #                 #             className="paragraph",
+                                #                 #             children=[
+                                #                 #                 "Das ist ein kurzer Text zur Sonnenstrahlung."
+                                #                 #             ],
+                                #                 #         ),
+                                #                 #     ],
+                                #                 # ),
+                                #             ],
+                                #         ),
+                                #     ],
+                                # ),
                             ],
                         ),
                     ],
