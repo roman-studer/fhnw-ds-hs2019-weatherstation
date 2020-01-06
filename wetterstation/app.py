@@ -140,8 +140,8 @@ def update_wind_warnings_texts(interval, station_name):
 
     warnings = get_data_for_wind_warnings(station_name)
 
-    return """Die Wahrscheinlichkeit von hohen Windgeschwindigkeiten beträgt {}%, 
-     jene von Sturmwinden beträgt {}%.""".format(round_up(warnings[0], 0), round_up(warnings[1], 0))
+    return """Die Wahrscheinlichkeit einer Starkwindwarnung beträgt {}%, 
+     die einer Sturmwarnungen beträgt {}%.""".format(round_up(warnings[0], 0), round_up(warnings[1], 0))
 
 
 @app.callback(
@@ -337,6 +337,7 @@ def gen_wind_speed(interval, station_name):
     trace_speed = dict(
         type="scatter",
         y=df["wind_speed_avg_10min"],
+        x=df.index,
         line=dict(
             color="#069dce",
             width=2,
@@ -350,6 +351,7 @@ def gen_wind_speed(interval, station_name):
     trace_gust = dict(
         type="scatter",
         y=df["wind_gust_max_10min"],
+        x=df.index,
         line={"color": "#0275a0"},
         hoverinfo="skip",
         mode="markers",
@@ -386,30 +388,28 @@ def gen_wind_speed(interval, station_name):
         #     "ticktext": ["4", "3", "2", "1", "0"],
         #     "title": "Verstrichene Zeit in Stunden",
         #     #"nticks": 5,
-        #     "gridcolor": app_color["graph_gridline"],
+        #     "gridcolor": app_color["transparent"],
+        #     "side": "top",
         # },
         # yaxis={
-        #     "range": [
-        #         0,
-        #         max(max_wind_gust_in_serie + 1, max_wind_speed_in_serie + 1),
-        #     ],
         #     "showgrid": True,
         #     "showline": True,
         #     "fixedrange": False,
         #     "zeroline": False,
         #     "title": "m/s",
-        #     "gridcolor": app_color["graph_gridline"],
+        #     "gridcolor": app_color["transparent"],
         #     #"nticks": max(5, round(df["wind_speed_avg_10min"].iloc[-1] / 6)),
         # },
 
-        xaxis = {
+        xaxis={
             "showgrid": False,
             "zeroline": False,
             "tickformat": "%H:%M",
             "side": "top",
-            "fixedrange": True,
+            "fixedrange": False, # True
+            "ticksuffix": "h",
         },
-        yaxis = {
+        yaxis={
             "showgrid": False,
             "showline": False,
             "zeroline": False,
@@ -626,7 +626,7 @@ def gen_historical_precipitation_graph(interval, station_name):
         layout = dict(
             plot_bgcolor=app_color["transparent"],
             paper_bgcolor=app_color["transparent"],
-            margin=dict(l=0, r=45, b=10, t=25),
+            margin=dict(l=0, r=50, b=10, t=25),
             hoverinfo='x+y',
             showlegend=True,
             legend=dict(
