@@ -248,9 +248,9 @@ def get_data_for_wind_warnings(station_name):
     client = influxdb.DataFrameClient(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
 
     query = """SELECT
-                wind_gust_max_10min
+                (wind_gust_max_10min)
                 FROM "meteorology"."autogen"."{}"
-                WHERE time > now() - 6h""".format(station_name)
+                WHERE time > now() - 21d""".format(station_name)
 
     df = pd.DataFrame(client.query(query)[station_name])
 
@@ -568,32 +568,43 @@ def get_air_temperature_forecast_values(station_name):
 
     df_final = pd.DataFrame(client.query(query)[station_name])
 
-    starting_datetime = df_ff.iloc[0:].index[0]
+    #starting_datetime = df_ff.iloc[0:].index[0]
     forecast_values = []
     try:
-        forecast_values.append(df_final.loc[starting_datetime + dt.timedelta(hours=2)].values)
+        forecast_values.append(df_final.loc[datetime_start + dt.timedelta(hours=2)].values)
     except KeyError:
         forecast_values.append('-')
 
     try:
-        forecast_values.append(df_final.loc[starting_datetime + dt.timedelta(hours=4)].values)
+        forecast_values.append(df_final.loc[datetime_start + dt.timedelta(hours=4)].values)
     except KeyError:
         forecast_values.append('-')
 
     try:
-        forecast_values.append(df_final.loc[starting_datetime + dt.timedelta(hours=8)].values)
+        forecast_values.append(df_final.loc[datetime_start + dt.timedelta(hours=8)].values)
     except KeyError:
         forecast_values.append('-')
 
     try:
-        forecast_values.append(df_final.loc[(starting_datetime + dt.timedelta(hours=24)).replace(hour=12, minute=0)].values)
+        forecast_values.append(df_final.loc[(datetime_start + dt.timedelta(hours=24)).replace(hour=12, minute=0)].values)
     except KeyError:
         forecast_values.append('-')
 
     try:
-        forecast_values.append(df_final.loc[(starting_datetime + dt.timedelta(hours=48)).replace(hour=12, minute=0)].values)
+        forecast_values.append(df_final.loc[(datetime_start + dt.timedelta(hours=48)).replace(hour=12, minute=0)].values)
     except KeyError:
         forecast_values.append('-')
+
+    # try:
+    #     print(df_final.loc[datetime_start + dt.timedelta(hours=2)])
+    #     print(df_final.loc[datetime_start + dt.timedelta(hours=4)])
+    #     print(df_final.loc[datetime_start + dt.timedelta(hours=8)])
+    #     print(df_final.loc[(datetime_start + dt.timedelta(hours=24)).replace(hour=12, minute=0)])
+    #     print(df_final.loc[(datetime_start + dt.timedelta(hours=48)).replace(hour=12, minute=0)])
+    #
+    #
+    # except:
+    #     print('fehler')
 
     return forecast_values
 

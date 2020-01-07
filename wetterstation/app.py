@@ -141,8 +141,8 @@ def update_wind_warnings_texts(interval, station_name):
 
     warnings = get_data_for_wind_warnings(station_name)
 
-    return """Die Wahrscheinlichkeit von hohen Windgeschwindigkeiten beträgt {}%, 
-     jene von Sturmwinden beträgt {}%.""".format(round_up(warnings[0], 0), round_up(warnings[1], 0))
+    return """Die Wahrscheinlichkeit einer Starkwindwarnung beträgt {}%, 
+     diejenige einer Sturmwarnungen beträgt {}%.""".format(round_up(warnings[0], 0), round_up(warnings[1], 0))
 
 
 @app.callback(
@@ -281,17 +281,17 @@ def gen_historical_air_temperature_graph(interval, station_name):
     layout = dict(
         plot_bgcolor=app_color["transparent"],
         paper_bgcolor=app_color["transparent"],
-        margin=dict(l=0, r=30, b=10, t=20),
+        margin=dict(l=0, r=30, b=0, t=20),
         hoverinfo='x+y',
         showlegend=True,
         legend=dict(
             yanchor='bottom',
             xanchor='center',
-            y=-0.5,
+            y=-0.75,
             x=0.5,
             orientation="h",
         ),
-        height=70,
+        height=80,
         font=dict(
             family="Dosis, Arial",
             size=11,
@@ -338,6 +338,7 @@ def gen_wind_speed(interval, station_name):
     trace_speed = dict(
         type="scatter",
         y=df["wind_speed_avg_10min"],
+        x=df.index,
         line=dict(
             color="#069dce",
             width=2,
@@ -351,6 +352,7 @@ def gen_wind_speed(interval, station_name):
     trace_gust = dict(
         type="scatter",
         y=df["wind_gust_max_10min"],
+        x=df.index,
         line={"color": "#0275a0"},
         hoverinfo="skip",
         mode="markers",
@@ -387,30 +389,28 @@ def gen_wind_speed(interval, station_name):
         #     "ticktext": ["4", "3", "2", "1", "0"],
         #     "title": "Verstrichene Zeit in Stunden",
         #     #"nticks": 5,
-        #     "gridcolor": app_color["graph_gridline"],
+        #     "gridcolor": app_color["transparent"],
+        #     "side": "top",
         # },
         # yaxis={
-        #     "range": [
-        #         0,
-        #         max(max_wind_gust_in_serie + 1, max_wind_speed_in_serie + 1),
-        #     ],
         #     "showgrid": True,
         #     "showline": True,
         #     "fixedrange": False,
         #     "zeroline": False,
         #     "title": "m/s",
-        #     "gridcolor": app_color["graph_gridline"],
+        #     "gridcolor": app_color["transparent"],
         #     #"nticks": max(5, round(df["wind_speed_avg_10min"].iloc[-1] / 6)),
         # },
 
-        xaxis = {
+        xaxis={
             "showgrid": False,
             "zeroline": False,
             "tickformat": "%H:%M",
             "side": "top",
-            "fixedrange": True,
+            "fixedrange": False, # True
+            "ticksuffix": "h",
         },
-        yaxis = {
+        yaxis={
             "showgrid": False,
             "showline": False,
             "zeroline": False,
@@ -440,9 +440,9 @@ def gen_wind_direction(interval):
     direction = [0, (df["wind_direction"][0] - 20), (df["wind_direction"][0] + 20), 0]
 
     traces_scatterpolar = [
-        {"r": [0, val, val, 0], "fillcolor": "#084E8A"},
-        {"r": [0, val * 0.65, val * 0.65, 0], "fillcolor": "blue"},
-        {"r": [0, val * 0.3, val * 0.3, 0], "fillcolor": "yellow"},
+        {"r": [0, val, val, 0], "fillcolor": "#0275a0"},
+        {"r": [0, val * 0.65, val * 0.65, 0], "fillcolor": "#0489b7"},
+        {"r": [0, val * 0.3, val * 0.3, 0], "fillcolor": "#069dce"},
     ]
 
     data = [
@@ -525,7 +525,7 @@ def gen_historical_barometric_pressure_graph(interval, station_name):
             x=0.5,
             orientation="h",
         ),
-        height=70,
+        height=80,
         font=dict(
             family="Dosis, Arial",
             size=12,
@@ -627,7 +627,7 @@ def gen_historical_precipitation_graph(interval, station_name):
         layout = dict(
             plot_bgcolor=app_color["transparent"],
             paper_bgcolor=app_color["transparent"],
-            margin=dict(l=0, r=45, b=10, t=25),
+            margin=dict(l=0, r=50, b=10, t=25),
             hoverinfo='x+y',
             showlegend=True,
             legend=dict(
@@ -668,19 +668,23 @@ def gen_historical_precipitation_graph(interval, station_name):
         layout = dict(
             plot_bgcolor=app_color["transparent"],
             paper_bgcolor=app_color["transparent"],
-            annotation=
-            {
-                "text": "No matching data found",
-                "xref": "paper",
-                "yref": "paper",
-                "showarrow": False,
-                "font": {
-                    "size": 28
+            annotations=[
+                {
+                    "text": "Die Station «{}» liefert keine Daten".format(STATIONS[station_name]),
+                    "xref": "paper",
+                    "yref": "paper",
+                    "showarrow": False,
                 }
-            }
+            ],
+            xaxis={
+                "visible": False
+            },
+            yaxis={
+                "visible": False
+            },
         )
 
-        return dict(layout=layout)
+        return dict(data=[], layout=layout)
 
 
 @app.callback(
@@ -787,6 +791,20 @@ def gen_historical_global_radiation_graph(interval, station_name):
         layout = dict(
             plot_bgcolor=app_color["transparent"],
             paper_bgcolor=app_color["transparent"],
+            annotations=[
+                {
+                    "text": "Die Station «{}» liefert keine Daten".format(STATIONS[station_name]),
+                    "xref": "paper",
+                    "yref": "paper",
+                    "showarrow": False,
+                }
+            ],
+            xaxis={
+                "visible": False
+            },
+            yaxis={
+                "visible": False
+            },
         )
 
         return dict(data=[], layout=layout)
