@@ -52,8 +52,8 @@ By selecting or hovering over data in one plot will update the other plots ('cro
 
 The documentation is saved as Jupyter Notebook as well as a PDF file.
 You can find them in
- [Notebook/Wetterstation_Documentation.ipynb](Notebook/Wetterstation_Documentation.ipynb) 
- and [Notebook/Wetterstation_Documentation.pdf](Notebook/Wetterstation_Documentation.pdf) respectively.
+ [Challenge_HS19C5_Wettermonitor_Dokumentation.ipynb](Notebook/Challenge_HS19C5_Wettermonitor_Dokumentation.ipynb) 
+ and [Challenge_HS19C5_Wettermonitor_Dokumentation.pdf](Notebook/Challenge_HS19C5_Wettermonitor_Dokumentation.pdf) respectively.
 
 Under the «tests» folder you can find some Notebook that were used to create the functions for the forecast as well as
 some files that were created for fun purposes.
