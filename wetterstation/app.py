@@ -141,7 +141,7 @@ def update_wind_warnings_texts(interval, station_name):
     warnings = get_data_for_wind_warnings(station_name)
 
     return """Die Wahrscheinlichkeit einer Starkwindwarnung beträgt {}%, 
-     die einer Sturmwarnungen beträgt {}%.""".format(round_up(warnings[0], 0), round_up(warnings[1], 0))
+     diejenige einer Sturmwarnungen beträgt {}%.""".format(round_up(warnings[0], 0), round_up(warnings[1], 0))
 
 
 @app.callback(
@@ -280,17 +280,17 @@ def gen_historical_air_temperature_graph(interval, station_name):
     layout = dict(
         plot_bgcolor=app_color["transparent"],
         paper_bgcolor=app_color["transparent"],
-        margin=dict(l=0, r=30, b=10, t=20),
+        margin=dict(l=0, r=30, b=0, t=20),
         hoverinfo='x+y',
         showlegend=True,
         legend=dict(
             yanchor='bottom',
             xanchor='center',
-            y=-0.5,
+            y=-0.75,
             x=0.5,
             orientation="h",
         ),
-        height=70,
+        height=80,
         font=dict(
             family="Dosis, Arial",
             size=11,
@@ -439,9 +439,9 @@ def gen_wind_direction(interval):
     direction = [0, (df["wind_direction"][0] - 20), (df["wind_direction"][0] + 20), 0]
 
     traces_scatterpolar = [
-        {"r": [0, val, val, 0], "fillcolor": "#084E8A"},
-        {"r": [0, val * 0.65, val * 0.65, 0], "fillcolor": "blue"},
-        {"r": [0, val * 0.3, val * 0.3, 0], "fillcolor": "yellow"},
+        {"r": [0, val, val, 0], "fillcolor": "#0275a0"},
+        {"r": [0, val * 0.65, val * 0.65, 0], "fillcolor": "#0489b7"},
+        {"r": [0, val * 0.3, val * 0.3, 0], "fillcolor": "#069dce"},
     ]
 
     data = [
@@ -524,7 +524,7 @@ def gen_historical_barometric_pressure_graph(interval, station_name):
             x=0.5,
             orientation="h",
         ),
-        height=70,
+        height=80,
         font=dict(
             family="Dosis, Arial",
             size=12,
@@ -667,19 +667,23 @@ def gen_historical_precipitation_graph(interval, station_name):
         layout = dict(
             plot_bgcolor=app_color["transparent"],
             paper_bgcolor=app_color["transparent"],
-            annotation=
-            {
-                "text": "No matching data found",
-                "xref": "paper",
-                "yref": "paper",
-                "showarrow": False,
-                "font": {
-                    "size": 28
+            annotations=[
+                {
+                    "text": "Die Station «{}» liefert keine Daten".format(STATIONS[station_name]),
+                    "xref": "paper",
+                    "yref": "paper",
+                    "showarrow": False,
                 }
-            }
+            ],
+            xaxis={
+                "visible": False
+            },
+            yaxis={
+                "visible": False
+            },
         )
 
-        return dict(layout=layout)
+        return dict(data=[], layout=layout)
 
 
 @app.callback(
@@ -786,6 +790,20 @@ def gen_historical_global_radiation_graph(interval, station_name):
         layout = dict(
             plot_bgcolor=app_color["transparent"],
             paper_bgcolor=app_color["transparent"],
+            annotations=[
+                {
+                    "text": "Die Station «{}» liefert keine Daten".format(STATIONS[station_name]),
+                    "xref": "paper",
+                    "yref": "paper",
+                    "showarrow": False,
+                }
+            ],
+            xaxis={
+                "visible": False
+            },
+            yaxis={
+                "visible": False
+            },
         )
 
         return dict(data=[], layout=layout)
