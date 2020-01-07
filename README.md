@@ -55,8 +55,8 @@ You can find them in
  [Challenge_HS19C5_Wettermonitor_Dokumentation.ipynb](Notebook/Challenge_HS19C5_Wettermonitor_Dokumentation.ipynb) 
  and [Challenge_HS19C5_Wettermonitor_Dokumentation.pdf](Notebook/Challenge_HS19C5_Wettermonitor_Dokumentation.pdf) respectively.
 
-Under the «tests» folder you can find some Notebook that were used to create the functions for the forecast as well as
-some files that were created for fun purposes.
+Under the [test folder](Notebook/tests) you can find some Notebook that were used to create the functions for the forecast as well as
+some files that were created for learning (or trial and error) purposes.
 
 ## Screenshot
 ### Dashboard
@@ -66,7 +66,7 @@ The dashboard shows some current weather data as well as some forecasts
 ![dashboard](docs/visualization/dashboard.png "Dashboard")
 
 You can find the documentation in [Beschreibung_Visualisierungen](/docs/Beschreibung_Visualisierungen.md).
-You may also have a look at the querie documentation in [Database_Structure_Queries](/docs/Database_Structure_Queries.txt).
+You may also have a look at the queries and database structure documentation in [Database_Structure_Queries](/docs/Database_Structure_Queries.txt).
 
 ## Built With
 
