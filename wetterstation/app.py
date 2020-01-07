@@ -814,4 +814,4 @@ def gen_historical_global_radiation_graph(interval, station_name):
 
 # Main
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=False)

@@ -39,7 +39,7 @@ $ python3 app.py
 You may get an ImportError for file libf77blas.so.3.
 Follow the instructions on https://github.com/Kitt-AI/snowboy/issues/262 to fix this issue.
 
-Open chromium and goto 127.0.0.1:9000.
+Open chromium and goto 127.0.0.1:8050.
 Then press F11 to enter the fullscreen mode.
 
 ## About the app
@@ -64,6 +64,9 @@ some files that were created for fun purposes.
 The dashboard shows some current weather data as well as some forecasts
 
 ![dashboard](docs/visualization/dashboard.png "Dashboard")
+
+You can find the documentation in [Beschreibung_Visualisierungen](/docs/Beschreibung_Visualisierungen.md).
+You may also have a look at the querie documentation in [Database_Structure_Queries](/docs/Database_Structure_Queries.txt).
 
 ## Built With
 
