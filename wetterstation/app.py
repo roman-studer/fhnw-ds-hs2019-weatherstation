@@ -15,6 +15,7 @@ from app_layout import *
 
 
 
+
 @app.callback(
     Output("header__subtitle", "children"), [
         Input("update-interval", "n_intervals"),
