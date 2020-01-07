@@ -194,7 +194,7 @@ def gen_air_temperature_and_windchill_graph(interval, station_name):
             x=0.5,
             orientation="h",
         ),
-        height=120,
+        height=140,
         font=dict(
             family="Dosis, Arial",
             size=12,
@@ -373,7 +373,7 @@ def gen_wind_speed(interval, station_name):
             x=0.5,
             orientation="h",
         ),
-        height=120,
+        height=140,
         font=dict(
             family="Dosis, Arial",
             size=12,
@@ -459,7 +459,7 @@ def gen_wind_direction(interval):
     ]
 
     layout = dict(
-        height=120,
+        height=140,
         margin=dict(l=10, r=10, b=25, t=25),
         hovermode="closest",
         legend=dict(font=dict(size=10), orientation="v"),
@@ -637,7 +637,7 @@ def gen_historical_precipitation_graph(interval, station_name):
                 x=0.5,
                 orientation="h",
             ),
-            height=120,
+            height=140,
             font=dict(
                 family="Dosis, Arial",
                 size=12,
@@ -760,7 +760,7 @@ def gen_historical_global_radiation_graph(interval, station_name):
                 x=0.5,
                 orientation="h",
             ),
-            height=120,
+            height=140,
             font=dict(
                 family="Dosis, Arial",
                 size=12,
