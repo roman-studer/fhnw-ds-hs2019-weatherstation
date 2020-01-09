@@ -63,7 +63,7 @@ You can find them in
  [Challenge_HS19C5_Wettermonitor_Dokumentation.ipynb](Notebook/Challenge_HS19C5_Wettermonitor_Dokumentation.ipynb)
  and [Challenge_HS19C5_Wettermonitor_Dokumentation.pdf](Notebook/Challenge_HS19C5_Wettermonitor_Dokumentation.pdf) respectively.
 
-Under the [test folder](Notebook/tests) you can find some Notebook that were used to create the functions for the forecasts as well as
+Under the [test folder](Notebook/tests) you can find some Jupyter Notebooks that were used to create the functions for the forecasts as well as
 some files that were created for learning (or trial and error) purposes.
 
 ## Screenshot
