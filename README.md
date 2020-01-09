@@ -24,11 +24,7 @@ python3 import_data.py
 ```
 
 Wait till the import sleeps for 600 seconds.
-In another terminal run the app with
-
-```
-python3 app.py
-```
+In another terminal run the app with:
 
 ```
 $ cd wetterstation
